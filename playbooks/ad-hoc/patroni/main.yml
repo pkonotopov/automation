@@ -3,12 +3,12 @@
   hosts: '{{ target | default ("postgres") }}'
   gather_facts: true
 
-  handlers:
-    - name: "Restart patroni"
-      service:
-        name: "patroni"
-        state: "restarted"
-      become: true
+  # handlers:
+  #   - name: "Restart patroni"
+  #     service:
+  #       name: "patroni"
+  #       state: "restarted"
+  #     become: true
 
   tasks:
     - name: Populate service facts
