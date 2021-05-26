@@ -41,12 +41,6 @@ pgbackrest_postgresql_conf_path: "{{ postgresql_data_dir }}/postgresql.conf"
 
 pgbackrest_database_path: "{{ postgresql_data_dir }}"
 
-pgbackrest_postgresql_conf_marker: >-
-  # {mark} dudefellah.pgbackrest - ANSIBLE MANAGED BLOCK
-
-pgbackrest_postgresql_conf_marker_begin: "BEGIN"
-pgbackrest_postgresql_conf_marker_end: "END"
-
 # Here we define users (see group_vars/postgres/patroni.yml)
 pgbackrest_stanza_name: "{{ patroni_cluster_name }}"
 pgbackrest_backup_user_name: "{{ backup_user_name }}"

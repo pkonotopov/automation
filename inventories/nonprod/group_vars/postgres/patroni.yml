@@ -8,7 +8,7 @@ patroni_cluster_name: "test-id-00"
 encoding: "en_US.UTF-8"
 
 # Network
-CIDR: 192.168.26.0/24
+CIDR: 192.168.0.0/24
 
 # postgres related var, some values are coming from the main.yml
 
