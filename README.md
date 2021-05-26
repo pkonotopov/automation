@@ -255,6 +255,12 @@ If we deploy all software without templating - no changes are needed.
 
 If you see some errors during the Zabbix Agent deployment, it is a normal situation, it is related to the use of the community role.
 
+As an example we can execute all scripts:
+
+```shell
+# ./zabbix-agent-nonprod.sh -l node1,node2 && ./postgres-nonprod.sh -l node1,node2 && ./patroni-nonprod.sh -l node1,node2 && ./pgbackrest-nonprod.sh -l node1,node2 && ./mamonsu-nonprod.sh -l node1,node2
+```
+
 ## 3. Configuration process
 
 The next part of the deploymet is the configuration and starting services.
@@ -269,6 +275,12 @@ We should apply all scripts located in the ad-hoc folder in a certain sequence:
 
 These scripts will only deliver configuration files to the target hosts and run the necessary services. In general, these are the same scripts described in the previous section.
 
+As an example we can execute all scripts:
+
+```shell
+# ./zabbix-agent-nonprod.sh -l node1,node2 && ./patroni-nonprod.sh -l node1,node2 && ./pgbackrest-nonprod.sh -l node1,node2 && ./mamonsu-nonprod.sh -l node1,node2
+```
+
 ## 4. Expected result
 
 The result of ansible should be as follows - it should be configured and running:
@@ -279,3 +291,21 @@ The result of ansible should be as follows - it should be configured and running
 * Installed monitoring agent Mamonsu;
 * Hosts should appear under the hosts section of the Zabbix Server, they should be added to the appropriate groups and templates should be assigned to them;
 * These hosts should also appear in the visualization system in Grafana.
+
+See the screenshots:
+
+* Zabbix: hosts
+
+![Zabbix hosts](img/zabbix.png)
+
+* Grafana: PostgreSQL
+
+![Grafana PostgreSQL](img/grafana-postgres.png)
+
+* Grafana: Patroni
+
+![Grafana Patroni](img/grafana-patroni.png)
+
+* Grafana: Linux Host
+
+![Grafana Linux Host](img/grafana-linux.png)
