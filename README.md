@@ -54,7 +54,7 @@ You also need to create an inventory file in which you need to describe the targ
 The basic idea of this automation approach is to divide hosts into groups based on their semantic value, which allows you to use group variables of the ansible. When you start a deploy, ansible finds the target host group where the deploy is taking place, finds the necessary group variables, and uses them.
 
 <pre>
-zycus-automation/
+automation/
 │
 ├── README.md
 ├── ansible.cfg
@@ -88,7 +88,7 @@ The `group_vars` folder has two subdirectories `all` and `postgres`. The `all` d
 The `postgres` directory contains the files `main.yml`, `patroni.yml`, `pgbackrest.yml`, and `mamonsu.yml`. These files contain variables relevant to the corresponding playbooks. 
 When we start the deploy process, the ansible looks at which host group we are applying the playbook to, searches the inventory for that host group, searches the group variables for the directory with the host group name, reads the variables from the `.yml` files from that directory and uses them in the playbook.
 
-The example of [`nonprod-static.yml`](inventories/nonprod/nonprod-static.yml):
+The example of [`inventory.yml`](inventories/nonprod/inventory.yml):
 
 ```yaml
 all:
@@ -99,7 +99,7 @@ all:
       ansible_host: 192.168.0.101
 ```
 
-The example of [`inventory.yml`](inventories/nonprod/inventory.yml):
+The example of [`nonprod-static.yml`](inventories/nonprod/nonprod-static.yml):
 
 ```yaml
 postgres:
