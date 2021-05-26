@@ -92,8 +92,8 @@
         group: root
         mode: 0644
       become: true
-      notify: 
-        - Restart patroni
+      # notify: 
+      #   - Restart patroni
 
     # - name: Enable software watchdog
     #   modprobe:

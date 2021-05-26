@@ -4,7 +4,7 @@
   gather_facts: true
 
   tasks:
-    - name: Create needed folders.
+    - name: Create folders.
       file:
         path: "{{ item }}"
         state: directory
@@ -14,7 +14,7 @@
       with_items: "{{ pgbackrest_paths | default([]) }}"
       become: true
 
-    - name: Add pgbackrest configuration file.
+    - name: Add pgbackrest.conf.
       template:
         src: pgbackrest.conf.j2
         dest: "{{ pgbackrest_conf_file }}"
@@ -41,7 +41,7 @@
         mode: +x
       become: true
 
-    - name: Add pgbackrest systemd unit files.
+    - name: Add pgbackrest systemd unit filess.
       template:
         src: systemd/{{ item }}.j2
         dest: /etc/systemd/system/{{ item }}
@@ -61,12 +61,17 @@
       with_items: "{{ pgbackrest_systemd_timers | default([]) }}"
       become: true
 
-    - name: Init pgbackrest backup repository.
+    - name: Define Leader
+      shell: "curl -o /dev/null -s -w '%{http_code}\n' http://localhost:8008"
+      register: curl_output
+
+    - name: Init pgbackrest backup repository
       command: "/usr/bin/pgbackrest --config-path={{ pgbackrest_conf_path }} --stanza={{ pgbackrest_stanza_name }} stanza-create" 
       environment:
         PGPASSWORD: "{{ pgbackrest_backup_user_password }}"
       become_user: "{{ pgbackrest_owner }}"
       become: true
+      when: 'curl_output.stdout == "200"'
 
     - name: Add services for full and diff backups.
       systemd:
@@ -77,7 +82,7 @@
       with_items: "{{ pgbackrest_systemd_units | default([]) }}"
       become: true
 
-    - name: Add timers for backup services.
+    - name: Add and start timers.
       systemd:
         name: "{{ item }}"
         enabled: yes
