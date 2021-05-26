@@ -1,0 +1,30 @@
+- name: "Apply Zabbix Agent configuration"
+  hosts: '{{ target | default ("zabbix_agent") }}'
+  gather_facts: true
+
+  handlers:
+    - name: "Restart Zabbix Agent"
+      service:
+        name: "zabbix-agent"
+        state: "restarted"
+      become: true
+
+  tasks:
+  - name: "Deploy Zabbix Agent configuration file"
+    template:
+      src: zabbix_agentd.conf.j2
+      dest: '/etc/zabbix/zabbix_agentd.conf'
+      owner: "root"
+      group: "zabbix"
+    become: true
+    tags: always
+    notify:
+      - Restart Zabbix Agent
+
+  - name: "Set Zabbix Agent service status"
+    service:
+      name: "zabbix-agent"
+      enabled: "true"
+      state: "started"
+    become: true
+    tags: always

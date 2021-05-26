@@ -1,0 +1,7 @@
+---
+# External roles
+
+- name: "ansible-role-pgbackrest"
+  src: "https://github.com/dudefellah/ansible-role-pgbackrest.git"
+  scm: "git"
+  version: "0.0.3"

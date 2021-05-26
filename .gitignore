@@ -1,0 +1,9 @@
+*/bin/
+*/terraform/
+*.retry
+*.swp
+*.pyc
+*/.settings/
+.idea
+.DC_Store
+___*.yml

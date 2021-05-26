@@ -1,0 +1,28 @@
+---
+- hosts: '{{ target | default("postgres") }}'
+  gather_facts: true
+  pre_tasks:
+    - name: Make selinux permissive
+      selinux:
+        policy: targeted
+        state: permissive
+      become: yes
+
+    - name: Install PostgreSQL repository
+      yum:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        state: present
+      become: yes
+
+  roles:
+    - role: ansible-role-postgresql
+      become: yes
+
+  post_tasks:
+  - name: "Set PostgreSQL service stopped and disabled"
+    service:
+      name: "postgresql-13"
+      enabled: false
+      state: stopped
+    become: true
+    tags: always

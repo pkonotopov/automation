@@ -1,0 +1,52 @@
+---
+postgresql_version: 13.2
+
+postgresql_user: postgres
+postgresql_group: postgres
+
+postgresql_enablerepo: pgdg13,pgdg13-updates-debuginfo
+
+postgresql_data_dir: "/var/lib/pgsql/13/data/"
+postgresql_bin_path: "/usr/pgsql-13/bin/"
+postgresql_config_path: "{{ postgresql_data_dir }}"
+
+postgresql_daemon: postgresql-13.service
+
+postgresql_packages:
+  - postgresql13-server
+  - postgresql13-libs
+  - postgresql13-contrib
+  - postgresql13-debuginfo
+
+postgresql_hba_entries:
+  - { type: local, database: all, user: postgres, auth_method: trust }
+  - { type: local, database: all, user: all, auth_method: trust }
+  - {
+      type: host,
+      database: all,
+      user: all,
+      address: "127.0.0.1/32",
+      auth_method: trust,
+    }
+  - {
+      type: host,
+      database: all,
+      user: all,
+      address: "{{ INTERNAL_CIDR }}",
+      auth_method: trust,
+    }
+  - {
+      type: host,
+      database: all,
+      user: all,
+      address: "0.0.0.0/0",
+      auth_method: md5,
+    }
+
+# For patroni we need to disable or stop postgresql service
+
+postgresql_service_state: stopped
+postgresql_service_enabled: false
+
+postgresql_locales:
+  - "en_US.UTF-8"

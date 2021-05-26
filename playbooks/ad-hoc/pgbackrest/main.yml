@@ -1,0 +1,69 @@
+---
+- name: "Apply pgbackrest configuration"
+  hosts: '{{ target | default ("postgres") }}'
+  gather_facts: true
+
+  tasks:
+    - name: Create folders.
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+        owner: postgres
+        group: postgres
+      with_items: "{{ pgbackrest_paths | default([]) }}"
+      become: true
+
+    - name: Add pgbackrest.conf.
+      template:
+        src: pgbackrest.conf.j2
+        dest: "{{ pgbackrest_conf_file }}"
+        owner: "{{ pgbackrest_owner }}"
+        group: "{{ pgbackrest_group }}"
+        mode: 0644
+      become: true
+
+    - name: Add sql script for backup user grants.
+      template:
+        src: scripts/backup.sql.j2
+        dest: /etc/pgbackrest/scripts/backup.sql
+        owner: "{{ pgbackrest_owner }}"
+        group: "{{ pgbackrest_group }}"
+        mode: 0644
+      become: true
+
+    - name: Add shell script for backups used in systemd services.
+      template:
+        src: scripts/pg_backup.sh.j2
+        dest: /etc/pgbackrest/scripts/pg_backup.sh
+        owner: "{{ pgbackrest_owner }}"
+        group: "{{ pgbackrest_group }}"
+        mode: +x
+      become: true
+
+    - name: Add pgbackrest systemd units.
+      template:
+        src: systemd/{{ item }}.j2
+        dest: /etc/systemd/system/{{ item }}
+        owner: root
+        group: root
+        mode: 0755
+      with_items: "{{ pgbackrest_systemd_units | default([]) }}"
+      become: true
+
+    - name: Init pgbackrest backup repository
+      command: "/usr/bin/pgbackrest --config-path={{ pgbackrest_conf_path }} --stanza={{ pgbackrest_stanza_name }} stanza-create" 
+      environment:
+        PGPASSWORD: "{{ pgbackrest_backup_user_password }}"
+      become_user: "{{ pgbackrest_owner }}"
+      become: true
+
+    - name: Start timers and services.
+      systemd:
+        name: "{{ item }}"
+        enabled: yes
+        state: started
+        masked: no
+      with_items: "{{ pgbackrest_systemd_units | default([]) }}"
+      become: true
+

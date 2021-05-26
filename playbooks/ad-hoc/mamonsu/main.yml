@@ -1,0 +1,74 @@
+- name: "Apply Mamonsu configuration"
+  hosts: '{{ target | default ("postgres") }}'
+  gather_facts: true
+
+  handlers:
+    - name: "Restart mamonsu"
+      service:
+        name: "mamonsu"
+        state: "restarted"
+      become: true
+
+  tasks:
+    - name: Create folders.
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+        owner: "{{ mamonsu_owner }}"
+        group: "{{ mamonsu_group }}"
+      with_items: "{{ mamonsu_paths | default([]) }}"
+      become: true
+
+    - name: "Deploy Mamonsu configuration file"
+      template:
+        src: agent.conf.j2
+        dest: '/etc/mamonsu/agent.conf'
+        owner: "{{ mamonsu_owner }}"
+        group: "{{ mamonsu_group }}"
+      become: true
+      tags: always
+      notify:
+        - Restart mamonsu
+
+    - name: Add plugins for mamonsu.
+      template:
+        src: plugins/{{ item }}.j2
+        dest: /etc/mamonsu/plugins/{{ item }}
+        owner: "{{ mamonsu_owner }}"
+        group: "{{ mamonsu_owner }}"
+        mode: 0644
+      with_items: "{{ mamonsu_scripts | default([]) }}"
+      notify:
+        - Restart mamonsu
+      become: true
+
+    - name: Define Leader
+      shell: "curl -o /dev/null -s -w '%{http_code}\n' http://localhost:8008"
+      register: curl_output
+
+    - name: "Mamonsu bootstrap"
+      shell: "mamonsu bootstrap -M {{ mamonsu_user_name }} -d {{ mamonsu_database }} -h 127.1 -U postgres -W postgres"
+      environment:
+        PGPASSWORD: postgres
+      when: 'curl_output.stdout == "200"'
+      become_user: postgres
+      become: true
+
+    - debug: var=curl_output.stdout
+
+    - name: "Create pg_stat_statements extension"
+      shell: "psql -h 127.1 -U postgres -d {{ mamonsu_database }} -c 'CREATE EXTENSION IF NOT EXISTS pg_stat_statements'"
+      environment:
+        PGPASSWORD: postgres
+      when: 'curl_output.stdout == "200"'
+      become_user: postgres
+      become: true
+
+    - name: "Set Mamonsu service status"
+      service:
+        name: "mamonsu"
+        enabled: "true"
+        state: "started"
+      become: true
+      tags: always

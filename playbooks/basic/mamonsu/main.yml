@@ -1,0 +1,16 @@
+---
+- hosts: '{{ target | default("postgres") }}'
+  gather_facts: true
+
+  tasks:
+    - name: Install PostgrePro repository
+      yum:
+        name: https://repo.postgrespro.ru/mamonsu/keys/centos.rpm
+        state: present
+      become: yes
+
+    - name: Install mamonsu
+      yum:
+        name: mamonsu
+        state: present
+      become: yes

@@ -1,0 +1,3 @@
+#!/bin/bash
+echo $1
+{{ postgres_bin_dir }}/psql "$1" -a -f /etc/patroni/post-init/grants.sql

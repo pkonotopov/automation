@@ -1,0 +1,51 @@
+---
+# some values are coming from the main.yml, patroni.yml
+
+pgbackrest_repo_path: /backup
+pgbackrest_paths:
+  - "{{ pgbackrest_repo_path }}"
+  - /etc/pgbackrest/scripts
+  - /etc/pgbackrest/sql
+  - /var/log/pgbackrest
+  - /var/run/pgbackrest
+
+pgbackrest_systemd_units:
+  - pg_diff_backup.service
+  - pg_diff_backup.timer
+  - pg_full_backup.service
+  - pg_full_backup.timer
+
+pgbackrest_owner: postgres
+pgbackrest_group: postgres
+
+pgbackrest_initial_backup: false
+
+pgbackrest_conf_path: /etc/pgbackrest
+pgbackrest_conf_file: "{{ pgbackrest_conf_path }}/pgbackrest.conf"
+
+pgbackrest_conf_cluster_stanzas: {}
+
+# Sets the log level for pgbackrest
+pgbackrest_log_level: info
+
+# repo1-retention-full option for pgbackrest in the [global] section:
+pgbackrest_repo_retention_full: 5
+pgbackrest_repo_retention_diff: 30
+
+pgbackrest_full_backup_systemd_timer_oncalendar: "Sun *-*-* 1:00:00"
+pgbackrest_diff_backup_systemd_timer_oncalendar: "Mon-Sat *-*-* 1:00:00"
+
+pgbackrest_postgresql_conf_path: "{{ postgresql_data_dir }}/postgresql.conf"
+
+pgbackrest_database_path: "{{ postgresql_data_dir }}"
+
+pgbackrest_postgresql_conf_marker: >-
+  # {mark} dudefellah.pgbackrest - ANSIBLE MANAGED BLOCK
+
+pgbackrest_postgresql_conf_marker_begin: "BEGIN"
+pgbackrest_postgresql_conf_marker_end: "END"
+
+# Here we define users (see group_vars/postgres/patroni.yml)
+pgbackrest_stanza_name: "{{ patroni_cluster_name }}"
+pgbackrest_backup_user_name: "{{ backup_user_name }}"
+pgbackrest_backup_user_password: "{{ backup_user_password }}"

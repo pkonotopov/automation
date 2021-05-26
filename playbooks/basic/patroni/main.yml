@@ -1,0 +1,26 @@
+- hosts: '{{ target | default("postgres") }}'
+  gather_facts: true
+
+  pre_tasks:
+    - name: Make selinux permissive
+      selinux:
+        policy: targeted
+        state: permissive
+      become: yes
+
+    - name: Install PostgreSQL repository
+      yum:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        state: present
+      become: yes
+
+    - name: Remove $PGDATA contents before Patroni installation
+      file:
+        state: absent
+        path: "{{ postgresql_data_dir }}"
+      become: yes
+
+  roles:
+    - role: patroni
+      ignore_errors: true
+      become: yes

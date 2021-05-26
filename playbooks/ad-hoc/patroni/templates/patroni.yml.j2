@@ -1,0 +1,181 @@
+# -*- coding: utf-8 -*-
+# Ansible generated config
+
+---
+name: {{ ansible_host }}
+scope: {{ patroni_cluster_name }}
+
+restapi:
+  listen: 0.0.0.0:{{ patroni_restapi_port }}
+  connect_address: {{ ansible_host }}:{{ patroni_restapi_port }}
+
+{% if used_dcs_system == 'raft' %}
+raft:
+  data_dir: {{ patroni_raft_dir }}
+  self_addr: {{ ansible_default_ipv4.address }}:{{ patroni_raft_port }}
+  partner_addrs: [{{ groups['raft'] | map('extract', hostvars, ['ansible_host']) | join(":2222,") }}:{{ patroni_raft_port }}]
+{% elif used_dcs_system == 'etcd' %}
+etcd:
+  hosts: {{ groups['etcd'] | map('extract', hostvars, ['ansible_host']) | join(":2379,") }}:{{ patroni_etcd_port }}
+{% elif used_dcs_system == 'consul' %}
+consul:
+  host: {{ ansible_default_ipv4.address }}:8500
+  token: {{ patroni_consul_token }}
+  scheme: http
+  register_service: true
+{% endif %}
+
+bootstrap:
+  dcs:
+    ttl: 30
+    loop_wait: 10
+    retry_timeout: 10
+    maximum_lag_on_failover: 1048576
+    synchronous_commit: remote_write
+    synchronous_mode: true
+    synchronous_mode_strict: false
+    synchronous_node_count: 1
+
+    postgresql:
+      use_pg_rewind: true
+      use_slots: true
+      parameters:
+        archive_command: {{ patroni_archive_command }}
+        restore_command: {{ patroni_restore_command }}
+        archive_mode: {{ patroni_archive_mode }}
+        archive_timeout: {{ patroni_archive_timeout }}
+        checkpoint_timeout: 300
+        client_min_messages: 'WARNING'
+        effective_cache_size: '1GB'
+        hot_standby_feedback: 'on'
+        hot_standby: "on"
+        maintenance_work_mem: '64MB'
+        max_connections: {{ postgres_max_connections }}
+        max_replication_slots: 4
+        max_wal_senders: 4
+        max_worker_processes: 4
+        shared_buffers: '{{ postgres_shared_buffers }}'
+        shared_preload_libraries: '{{ postgres_shared_preload_libraries }}'
+        synchronous_commit: "remote_write"
+        wal_compression: 'true'
+        wal_keep_segments: 30
+        wal_level: replica
+        wal_log_hints: "on"
+        work_mem: '8MB'
+
+  initdb:
+  - encoding: UTF8
+  - data-checksums
+
+  pg_hba:
+  - local all all md5
+  - host all all 127.0.0.1/32 md5
+  - host replication {{ replication_user_name }} 127.0.0.1/32 md5
+  - host replication {{ replication_user_name }} {{ CIDR }} md5
+  - host all {{ backup_user_name }} {{ CIDR }} md5
+  - host all {{ rewind_user_name }} {{ CIDR }} md5
+  - host all {{ mamonsu_user_name }} {{ CIDR }} md5
+  - host all all 0.0.0.0/0 md5
+
+  # setup all users here !
+  post_init: /etc/patroni/post-init/post-init.sh
+
+  users:
+    {{ replication_user_name }}:
+      password: {{ replication_user_password }}
+      options:
+        - replication
+        - login
+
+postgresql:
+  listen: 0.0.0.0:5432
+  bin_dir: {{ postgres_bin_dir }}
+  connect_address: {{ ansible_host }}:5432
+  data_dir: {{ postgres_database_dir }}
+  remove_data_directory_on_rewind_failure: true
+  remove_data_directory_on_diverged_timelines: true
+  pgpass: {{ postgres_home_dir }}/.pgpass
+  parameters:
+    logging_collector: 'off'
+    log_destination: 'stderr'
+    log_connections: 'off'
+    log_disconnections: 'off'
+    log_statement: 'all'
+    log_min_messages: 'INFO'
+    log_min_error_statement: 'INFO'
+    log_min_duration_statement: '0'
+    debug_print_parse: 'off'
+    debug_print_rewritten: 'off'
+    debug_print_plan: 'off'
+    debug_pretty_print: 'on'
+    log_checkpoints: 'on'
+    log_duration: 'off'
+    log_error_verbosity: 'verbose'
+    log_hostname: 'off'
+    log_line_prefix: '[postgres] %t %c %u '
+    log_lock_waits: 'off'
+    log_temp_files: '0'
+    log_timezone: 'UTC'
+    log_parser_stats: 'off'
+    log_planner_stats: 'off'
+    log_executor_stats: 'off'
+    log_statement_stats: 'off'
+
+# According to the documentation and current setup we have linked $PGDATA/pg_wal -> /data/pgwal
+# For this option we are provided the following options:
+# 
+
+  create_replica_methods:
+    - pgbackrest
+    - basebackup
+
+  pgbackrest:
+    command: pgbackrest --config-path={{ pgbackrest_conf_path }} --stanza={{ pgbackrest_stanza_name }}  --process-max=4 restore --delta
+    keep_data: True
+    no_params: True
+
+  basebackup:
+    max-rate: '100M'
+    checkpoint: 'fast'
+
+  # callbacks:
+  #   on_role_change: 'sudo /etc/patroni/scripts/vip.py'
+  #   on_start: 'sudo /etc/patroni/scripts/vip.py'
+  #   on_restart: 'sudo /etc/patroni/scripts/vip.py'
+  #   on_stop: 'sudo /etc/patroni/scripts/vip.py'
+
+  pg_hba:
+    - local all all md5
+    - host all all 127.0.0.1/32 md5
+    - host replication {{ replication_user_name }} 127.0.0.1/32 md5
+    - host replication {{ replication_user_name }} {{ CIDR }} md5
+    - host all {{ backup_user_name }} {{ CIDR }} md5
+    - host all {{ rewind_user_name }} {{ CIDR }} md5
+    - host all {{ mamonsu_user_name }} {{ CIDR }} md5
+    - host all all 0.0.0.0/0 md5
+
+  authentication:
+    replication:
+      username: {{ replication_user_name }}
+      password: {{ replication_user_password }}
+    superuser:
+      username: {{ superuser }}
+      password: {{ superuser_password }}
+    rewind:
+      username: {{ rewind_user_name }}
+      password: {{ rewind_user_password }}
+
+log:
+  level: INFO
+  format: '[patroni] %(asctime)s %(levelname)s: %(message)s'
+
+watchdog:
+  mode: off
+  # device: {{ watchdog_device }}
+  # mode: automatic
+
+tags:
+  nofailover: false
+  noloadbalance: false
+  clonefrom: false
+  nosync: false

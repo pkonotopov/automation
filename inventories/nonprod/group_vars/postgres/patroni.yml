@@ -1,0 +1,62 @@
+---
+# Possible values: etcd, raft, consul
+
+used_dcs_system: "consul"
+patroni_cluster_name: "cluster-nonprod-01"
+
+# Setting encoding
+encoding: "en_US.UTF-8"
+
+# Network
+CIDR: 192.168.0.0/24
+
+# postgres related var, some values are coming from the main.yml
+
+postgres_bin_dir: "{{ postgresql_bin_path }}"
+postgres_database_dir: "{{ postgresql_data_dir }}"
+postgres_wal_dir: "/data/pgwal"
+postgres_db_locale: "en_US.UTF-8"
+postgres_env_file: "/etc/default/postgresql"
+
+postgres_listen_address: "*"
+postgres_listen_port: "5432"
+postgres_max_connections: "100"
+postgres_shared_buffers: "128MB"
+postgres_shared_preload_libraries: "pg_stat_statements"
+
+postgres_system_user: postgres
+postgres_system_group: postgres
+postgres_home_dir: "/var/lib/pgsql"
+
+# patroni
+superuser: "postgres"
+superuser_password: "postgres"
+
+
+patroni_raft_dir: "/data/raft"
+
+replication_user_name: "replicator"
+replication_user_password: "replicator"
+
+backup_user_name: "backup"
+backup_user_password: "backup"
+
+admin_user_name: "admin"
+admin_user_password: "admin"
+
+rewind_user_name: "rewind"
+rewind_user_password: "rewind"
+
+# Ports
+patroni_restapi_port: 8008
+patroni_raft_port: 2222
+patroni_etcd_port: 2379
+
+watchdog_device: "/dev/watchdog"
+
+patroni_archive_mode: "on"
+patroni_archive_command: "pgbackrest --config-path=/etc/pgbackrest --stanza={{ pgbackrest_stanza_name }} --archive-async archive-push %p"
+patroni_restore_command: 'pgbackrest --config-path=/etc/pgbackrest --stanza={{ pgbackrest_stanza_name }} archive-get %f "%p"'
+patroni_archive_timeout: 1800
+
+patroni_consul_token: 0000-0000-0000-0000

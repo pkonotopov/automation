@@ -1,0 +1,8 @@
+[Unit]
+Description=PostgreSQL diff backup
+Wants=pg_diff_backup.timer
+
+[Service]
+Type=oneshot
+User=postgres
+ExecStart=/etc/pgbackrest/scripts/pg_backup.sh --diff

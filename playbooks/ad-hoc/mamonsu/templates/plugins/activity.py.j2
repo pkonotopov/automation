@@ -1,0 +1,51 @@
+# -*- coding: utf-8 -*-
+# To generate new template for Zabbix please run
+# python3 ./mamonsu.py export template test.xml -c /etc/mamonsu/agent.conf --add-plugins=/etc/mamonsu/plugins
+#
+
+from mamonsu.plugins.pgsql.plugin import PgsqlPlugin as Plugin
+from mamonsu.plugins.pgsql.pool import Pooler
+import json
+
+
+class Activity(Plugin):
+
+    DEFAULT_CONFIG = {
+        'enabled': str(True)
+    }
+    Interval = 10
+
+    AgentPluginType = 'pg'
+
+    key_pg_stat_activity = 'pgsql.stat.activity{0}'
+
+    key_pg_stat_activity_query = "select coalesce(json_agg(pg_stat_activity),'[]'::json)"\
+        "from pg_stat_activity where query not in ('commit;','') " \
+        "and backend_type = 'client backend'"
+
+    def run(self, zbx):
+
+        result = Pooler.query(self.key_pg_stat_activity_query)
+        q = json.dumps(result)
+
+        # print(type(q))
+        zbx.send(self.key_pg_stat_activity.format('[]'), str(q))
+
+    def items(self, template):
+
+        result = ''
+
+        if self.Type == "mamonsu":
+            delay = self.plugin_config('interval')
+            value_type = Plugin.VALUE_TYPE.text
+        else:
+            delay = 5  # TODO check delay
+            value_type = Plugin.VALUE_TYPE.numeric_unsigned
+
+        result += template.item({
+            'name': 'PostgreSQL: pg_stat_activity dump',
+            'key': self.right_type(self.key_pg_stat_activity),
+            'delay': delay,
+            'value_type': value_type
+        })
+        return result

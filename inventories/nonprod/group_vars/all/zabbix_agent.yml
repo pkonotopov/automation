@@ -1,0 +1,17 @@
+---
+zabbix_agent_version: "5.2"
+zabbix_agent_serveractive: "my.zabbix.server"
+zabbix_agent_hostmetadata: "env={{ target_environment }};groups=db,linux"
+zabbix_agent_startagents: 0
+zabbix_install_pip_packages: false
+zabbix_agent_refreshactivechecks: 180
+zabbix_agent_buffersend: 10
+zabbix_agent_buffersize: 200
+zabbix_agent_timeout: 10
+zabbix_agent_hostname: "{{ inventory_hostname }}"
+
+zabbix_agent_service_enabled: false
+zabbix_agent_service_state: stopped
+zabbix_agent_include: /etc/zabbix/zabbix_agentd.d
+zabbix_agent_pidfile: /var/run/zabbix/zabbix_agentd.pid
+zabbix_agent_logfile: /var/log/zabbix/zabbix_agentd.log

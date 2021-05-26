@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+#
+# Configuration steps:
+#
+# Add a specific entry into /etc/sudoers - 'sudo echo "postgres ALL=NOPASSWD: /etc/patroni/scripts/vip.py" >> /etc/sudoers.d/patroni'
+# Create folder - 'sudo mkdir -p /etc/patroni/scripts'
+# Copy this script into this folder - 'sudo cp vip.py /etc/patroni/scripts'
+# Make script executable 'sudo chmod +x /etc/patroni/scripts/vip.py'
+# Add into postgresql section in /etc/patroni/patroni.yml these lines:
+#
+#  callbacks:
+#    on_role_change: 'sudo /etc/patroni/scripts/vip.py'
+#    on_start:       'sudo /etc/patroni/scripts/vip.py'
+#    on_stop:        'sudo /etc/patroni/scripts/vip.py'
+#    on_restart:     'sudo /etc/patroni/scripts/vip.py'
+#
+# Reload patroni configuration 'sudo systemctl reload patroni'
+#
+
+"""
+Usage:
+    vip.py <hook> <role> <scope>
+
+Examples:
+    vip.py on_role_change master my-cluster
+
+Options:
+    <hook>                  Callback: on_role_change, on_start, on_stop, on_restart
+    <role>                  Current cluster member role
+    <scope>                 Current cluster name
+
+"""
+import sys
+import logging
+from docopt import docopt
+from pyroute2 import IPRoute
+from pyroute2 import NetlinkError
+
+
+# Set up an interface and a virtual ip address.
+vm_ip_addresses = []
+vm_interface = '{{ network_interface_name }}'
+vm_vip_address = '{{ virtual_ip_address }}'
+
+# Logger init
+logger = logging.getLogger('vip')
+logger.setLevel(logging.INFO)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.INFO)
+
+formatter = logging.Formatter(
+    '%(name)s: %(asctime)s %(levelname)s: %(message)s')
+
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+def ip_addr_manipulation(action, vip_address):
+    with IPRoute() as ip:
+        ip_addr_list = ip.get_addr(label=vm_interface)
+
+        for i in ip_addr_list:
+            vm_ip_addresses.append(i.get_attr('IFA_ADDRESS'))
+
+        if vm_vip_address not in vm_ip_addresses and action == 'add' or vm_vip_address in vm_ip_addresses and action == 'delete':
+            index = ip.link_lookup(ifname=vm_interface)
+            if index:
+                try:
+                    ip.addr(action, index, vip_address, mask=24)
+                    if action == 'add':
+                        logger.info("An ip address {} added to the network interface {}.".format(
+                            vip_address, vm_interface))
+                    else:
+                        logger.info("An ip address {} removed from the network interface {}.".format(
+                            vip_address, vm_interface))
+                except NetlinkError as e:
+                    if action == 'add':
+                        logger.error("Unable to add an ip address {} to the network interface {}.".format(
+                            vip_address, vm_interface))
+                    else:
+                        logger.error("Unable to remove an ip address {} from the network interface {}.".format(
+                            vip_address, vm_interface))
+                    logger.error("Netlink error: {}".format(e))
+                    sys.exit(1)
+            ip.close()
+            sys.exit(0)
+        else:
+            if action == 'add':
+                logger.info("An ip address {} already added to the network interface {}.".format(
+                    vip_address, vm_interface))
+            elif action == 'delete':
+                logger.info("Nothing to delete. No ip address {} on the network interface {}.".format(
+                    vip_address, vm_interface))
+            sys.exit(0)
+
+def main():
+
+    args = docopt(__doc__, options_first=True)
+    logger.info("hook='{}', role='{}', scope='{}'".format(
+        args['<hook>'], args['<role>'], args['<scope>']))
+
+    if args['<hook>'] == 'on_role_change' and args['<role>'] == 'master' and args['<scope>']:
+        ip_addr_manipulation('add', vm_vip_address)
+
+    elif args['<hook>'] == 'on_role_change' and args['<role>'] == 'replica' and args['<scope>']:
+        ip_addr_manipulation('delete', vm_vip_address)
+
+    elif args['<hook>'] == 'on_start' and args['<role>'] == 'master' and args['<scope>']:
+        ip_addr_manipulation('add', vm_vip_address)
+
+    elif args['<hook>'] == 'on_stop' and args['<role>'] == 'master' and args['<scope>']:
+        ip_addr_manipulation('delete', vm_vip_address)
+
+    elif args['<hook>'] == 'on_start' and args['<role>'] == 'replica' and args['<scope>']:
+        ip_addr_manipulation('delete', vm_vip_address)
+
+    elif args['<hook>'] == 'on_stop' and args['<role>'] == 'replica' and args['<scope>']:
+        ip_addr_manipulation('delete', vm_vip_address)
+
+    elif args['<hook>'] == 'on_restart' and args['<role>'] == 'master' and args['<scope>']:
+        ip_addr_manipulation('add', vm_vip_address)
+
+    elif args['<hook>'] == 'on_restart' and args['<role>'] == 'replica' and args['<scope>']:
+        ip_addr_manipulation('delete', vm_vip_address)
+
+    else:
+        logger.info("Nothing to do. Please check your parameters.")
+        sys.exit(0)
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,34 @@
+[global]
+# backup-replica=n
+repo1-path={{ pgbackrest_repo_path }}
+backup-user={{ pgbackrest_backup_user_name }}
+log-level-file={{pgbackrest_log_level }}
+log-level-console={{ pgbackrest_log_level }}
+compress-type=lz4
+compress-level=3
+lock-path=/var/run/pgbackrest
+
+[{{ pgbackrest_stanza_name }}]
+pg1-path={{ pgbackrest_database_path }}
+pg1-socket-path=/var/run/postgresql
+pg1-database=postgres
+pg1-user={{ pgbackrest_backup_user_name }}
+pg1-host-user=postgres
+
+# For the obtaining backups from replica
+# pg2-path={{ pgbackrest_database_path }}
+# pg2-socket-path=/var/run/postgresql
+# pg2-database=postgres
+# pg2-user=backup
+# pg2-host-user=postgres
+
+retention-diff={{ pgbackrest_repo_retention_diff }}
+retention-full={{ pgbackrest_repo_retention_full }}
+start-fast=y
+stop-auto=y
+
+[global:archive-get]
+process-max=2
+
+[global:archive-push]
+process-max=2

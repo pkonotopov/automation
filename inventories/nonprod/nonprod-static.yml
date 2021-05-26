@@ -1,0 +1,10 @@
+---
+postgres:
+  hosts:
+    node1:
+    node2:
+
+cluster-nonprod-01:
+  hosts:
+    node1:
+    node2:

@@ -1,0 +1,26 @@
+--
+-- Set grants to the {{ replication_user }}, {{ backup_user }}, {{ rewind_user }} users
+--
+
+CREATE ROLE {{ replication_user }} WITH REPLICATION LOGIN PASSWORD '{{ replication_user_password }}';
+CREATE ROLE {{ backup_user }} WITH LOGIN PASSWORD '{{ backup_user_password }}';
+CREATE ROLE {{ rewind_user }} WITH LOGIN PASSWORD '{{ rewind_user_password }}';
+
+GRANT USAGE ON SCHEMA pg_catalog TO {{ backup_user }};
+GRANT USAGE ON SCHEMA pg_catalog TO {{ rewind_user }};
+
+GRANT EXECUTE ON function pg_catalog.pg_ls_dir(text, boolean, boolean) TO {{ rewind_user }};
+GRANT EXECUTE ON function pg_catalog.pg_stat_file(text, boolean) TO {{ rewind_user }};
+GRANT EXECUTE ON function pg_catalog.pg_read_binary_file(text) TO {{ rewind_user }};
+GRANT EXECUTE ON function pg_catalog.pg_read_binary_file(text, bigint, bigint, boolean) TO {{ rewind_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.current_setting(text) TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.pg_is_in_recovery() TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.pg_start_backup(text, boolean, boolean) TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.pg_stop_backup(boolean, boolean) TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.pg_create_restore_point(text) TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.pg_switch_wal() TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.pg_last_wal_replay_lsn() TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.txid_current() TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.txid_current_snapshot() TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.txid_snapshot_xmax(txid_snapshot) TO {{ backup_user }};
+GRANT EXECUTE ON FUNCTION pg_catalog.pg_control_checkpoint() TO {{ backup_user }};

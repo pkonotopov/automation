@@ -1,0 +1,99 @@
+---
+- name: "Apply Patroni configuration"
+  hosts: '{{ target | default ("postgres") }}'
+  gather_facts: true
+
+  handlers:
+    - name: "Restart patroni"
+      service:
+        name: "patroni"
+        state: "restarted"
+      become: true
+
+  tasks:
+    - name: Create folders
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0700
+        owner: postgres
+        group: postgres
+      with_items:
+        - /data/raft
+        - /etc/patroni
+        - /etc/patroni/scripts
+        - /etc/patroni/post-init
+      become: true
+
+    - name: Add patroni.yml with raft config.
+      template:
+        src: patroni.yml.j2
+        dest: /etc/patroni/patroni.yml
+        owner: postgres
+        group: postgres
+        mode: 0644
+      become: true
+
+    - name: Add sql grants post-init script.
+      template:
+        src: post-init/{{ item }}.sql.j2
+        dest: /etc/patroni/post-init/{{ item }}.sql
+        owner: postgres
+        group: root
+        mode: 0755
+      with_items:
+        - backup
+        - rewind
+        - mamonsu
+      become: true
+
+    - name: Add bash grants post-init script.
+      template:
+        src: post-init/post-init.sh.j2
+        dest: /etc/patroni/post-init/post-init.sh
+        owner: root
+        group: root
+        mode: 0755
+      become: true
+
+    - name: Add postgres user to sudoers
+      template:
+        src: patroni_sudo.j2
+        dest: /etc/sudoers.d/patroni
+        owner: root
+        group: root
+        mode: 0644
+      become: true
+
+    - name: Add patroni unit file
+      template:
+        src: patroni.service.j2
+        dest: /usr/lib/systemd/system/patroni.service
+        owner: root
+        group: root
+        mode: 0644
+      become: true
+      notify: 
+        - Restart patroni
+
+    # - name: Enable software watchdog
+    #   modprobe:
+    #     name: softdog
+    #     state: present
+    #     params: "soft_noboot=0 nowayout=0"
+    #   become: true
+
+    # - name: Set access permissions for 'postgres' to access watchdog device
+    #   file:
+    #     path: "{{ watchdog_device }}"
+    #     owner: postgres
+    #     group: postgres
+    #   become: true
+
+    - name: Start patroni service.
+      systemd:
+        name: patroni
+        enabled: yes
+        state: started
+        masked: no
+      become: true

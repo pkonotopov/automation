@@ -1,0 +1,4 @@
+---
+env: "prod"
+ansible_environment: "prod"
+target_environment: "prod"

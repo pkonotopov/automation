@@ -1,0 +1,5 @@
+#!/bin/bash
+
+{{ postgres_bin_dir }}/psql "$1" -a -f /etc/patroni/post-init/backup.sql
+{{ postgres_bin_dir }}/psql "$1" -a -f /etc/patroni/post-init/rewind.sql
+{{ postgres_bin_dir }}/psql "$1" -a -f /etc/patroni/post-init/mamonsu.sql

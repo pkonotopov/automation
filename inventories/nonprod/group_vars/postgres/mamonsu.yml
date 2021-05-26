@@ -1,0 +1,22 @@
+---
+mamonsu_user_name: mamonsu
+mamonsu_user_password: mamonsu
+mamonsu_database: mamonsu
+mamonsu_application_name: mamonsu
+mamonsu_scripts:
+  - activity.py
+  - replica.py
+mamonsu_paths:
+  - /etc/mamonsu
+  - /etc/mamonsu/scripts
+  - /etc/mamonsu/plugins
+  - /var/log/mamonsu
+  - /var/run/mamonsu
+
+mamonsu_owner: mamonsu
+mamonsu_group: mamonsu
+
+# This is from patroni.yml
+
+superuser_password: "{{ superuser_password }}"
+superuser_name: "{{ superuser }}"

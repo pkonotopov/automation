@@ -1,0 +1,8 @@
+---
+- name: Install packages
+  include_tasks: install.yml
+  tags: install
+
+# - name: Configure and start all
+#   include_tasks: configure.yml
+#   tags: config

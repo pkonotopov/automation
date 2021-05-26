@@ -1,0 +1,116 @@
+---
+- block:
+    - name: "Ensure dest directories created for {{ deployment.name }}"
+      file:
+        state: "directory"
+        dest: "/etc/zabbix/scripts/{{ deployment.name }}"
+        owner: "root"
+        group: "zabbix"
+        mode: "u=rwX,g=rX,o="
+
+    - name: "Deploy scripts for {{ deployment.name }}"
+      template:
+        src: "{{ tmpl }}"
+        dest: '/etc/zabbix/scripts/{{ deployment.name }}/{{ tmpl | basename | replace(".j2", "") }}'
+        owner: "root"
+        group: "zabbix"
+        mode: '{{ deployment.file_mode | default("u=rwx,g=rx,o=" if (tmpl | basename | replace(".j2", "")).split(".")[-1] in ["py", "sh"] else "u=rw,g=rw,o=") }}'
+      vars:
+        script_vars: "{{ deployment.script_vars | default(omit) }}"
+      loop: "{{ lookup('fileglob', './templates/' + deployment.name + '/scripts/*', wantlist = True) + lookup('fileglob', './templates/' + deployment.name + '/scripts/.*', wantlist = True)}}"
+      loop_control:
+        loop_var: "tmpl"
+        label: '{{ tmpl | basename | replace(".j2", "") }}'
+
+    - name: "Deploy userparameters for {{ deployment.name }}"
+      template:
+        src: "{{ userparameter }}"
+        dest: '/etc/zabbix/zabbix_agentd.d/userparameter_{{ userparameter | basename | replace(".j2", "") }}'
+        owner: "root"
+        group: "zabbix"
+        mode: "u=rw,g=r,o="
+      loop: "{{ lookup('fileglob', './templates/' + deployment.name + '/userparameters/*.j2', wantlist = True) }}"
+      loop_control:
+        loop_var: "userparameter"
+        label: '{{ userparameter | basename | replace(".j2", "") }}'
+      notify: "Restart Zabbix Agent"
+
+    - name: "Update sudoers file for zabbix agent for {{ deployment.name }}"
+      lineinfile:
+        path: "/etc/sudoers.d/10-zabbix-agent"
+        create: true
+        owner: "root"
+        group: "root"
+        mode: 0440
+        line: "%zabbix ALL=(root) NOPASSWD:{{ program }}"
+        validate: "visudo -cf %s"
+      loop: "{{ deployment.sudo }}"
+      loop_control:
+        loop_var: "program"
+      when: "deployment.sudo is defined"
+
+    - name: "Installing packages for {{ deployment.name }}"
+      package:
+        name: "{{ package }}"
+        state: "present"
+      loop: "{{ deployment.packages_prereqs | default([]) }}"
+      loop_control:
+        loop_var: "package"
+
+    - block:
+        - name: "Ensure python pip installed"
+          yum:
+            name: 'python{{ "3" if ansible_python_version[0] == "3" else "" }}-pip'
+            state: "present"
+
+        - name: "Installing python pip modules for {{ deployment.name }}"
+          pip:
+            name: "{{ module }}"
+            state: "present"
+            extra_args: "--upgrade -b ~/.ansible/pip"
+            umask: "0022"
+          loop: "{{ deployment.python_prereqs }}"
+          loop_control:
+            loop_var: "module"
+
+        - name: "Clean temp build dir"
+          file:
+            path: "~/.ansible/pip"
+            state: "absent"
+          changed_when: false
+
+      when: "deployment.python_prereqs is defined"
+
+    - block:
+        - name: "Add cron jobs for {{ deployment.name }}"
+          cron:
+            name: "{{ job.name }}"
+            cron_file: "{{ job.cron_file }}"
+            minute: "{{ job.minute }}"
+            hour: '{{ job.hour | default("*")}}'
+            day: '{{ job.day | default("*")}}'
+            weekday: '{{ job.weekday | default("*")}}'
+            month: '{{ job.month | default("*")}}'
+            job: "{{ job.job }}"
+            user: "zabbix"
+            state: "present"
+          loop: "{{ deployment.cron_jobs }}"
+          loop_control:
+            loop_var: "job"
+      when: "deployment.cron_jobs is defined"
+
+    - name: "Deploy files for {{ deployment.name }}"
+      template:
+        src: "{{ file.src }}"
+        dest: "{{ file.dest }}"
+        owner: "root"
+        group: "zabbix"
+        mode: '{{ file.mode | default("u=rw,g=r,o=") }}'
+      loop: "{{ deployment.files }}"
+      loop_control:
+        loop_var: "file"
+      when: "deployment.files is defined"
+
+  become: true
+  tags: "deploy"
+  when: "filter is not defined or deployment.name | regex_search(filter)"

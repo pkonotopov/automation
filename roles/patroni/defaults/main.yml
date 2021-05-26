@@ -1,0 +1,53 @@
+---
+# Setting encoding
+encoding: "en_US.UTF-8"
+
+# Network
+CIDR: 192.168.26.0/24
+
+# VIP setup
+network_interface_name: ens18
+virtual_ip_address: 192.168.100.100
+
+# postgres
+postgres_bin_dir: "/opt/pgpro/ent-12/bin/"
+postgres_database_dir: "/data/pgdata"
+postgres_wal_dir: "/data/pgwal"
+postgres_db_locale: "en_US.UTF-8"
+postgres_env_file: "/etc/default/postgrespro"
+
+postgres_listen_address: "*"
+postgres_listen_port: "5432"
+postgres_max_connections: "100"
+postgres_shared_buffers: "128MB"
+postgres_shared_preload_libraries: "pg_stat_statements"
+
+postgres_system_user: postgres
+postgres_system_group: postgres
+postgres_home_dir: "/var/lib/postgres"
+
+# patroni
+superuser: "postgres"
+superuser_password: "postgres"
+
+patroni_cluster_name: "pgpro-ee-test"
+patroni_raft_dir: "/data/raft"
+
+admin_user: "admin"
+admin_user_password: "admin"
+
+replication_user: "replicator"
+replication_user_password: "replicator"
+
+backup_user: "backup"
+backup_user_password: "backup"
+
+rewind_user: "rewind"
+rewind_user_password: "rewind"
+
+# Ports
+patroni_restapi_port: 8008
+patroni_raft_port: 2222
+patroni_etcd_port: 2379
+
+watchdog_device: "/dev/watchdog"

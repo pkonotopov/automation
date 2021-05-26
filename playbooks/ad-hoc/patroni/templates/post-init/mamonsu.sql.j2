@@ -1,0 +1,8 @@
+--
+-- Create mamonsu user and mamonsu database
+--
+
+CREATE USER {{ mamonsu_user_name }} WITH PASSWORD '{{ mamonsu_user_password }}' LOGIN;
+
+CREATE DATABASE {{ mamonsu_database }} OWNER {{ mamonsu_user_name }};
+

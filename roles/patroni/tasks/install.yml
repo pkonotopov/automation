@@ -1,0 +1,21 @@
+---
+- name: Install python3 and dependecies
+  yum:
+    name:
+      - python3
+      - python3-devel
+      - python3-pip
+      - python3-psycopg2
+      - python3-setuptools
+      - python3-psutil
+      - python3-urllib3
+      - python3-consul
+
+- name: Add python3 packages
+  pip:
+    executable: "/bin/pip3"
+    name:
+      - patroni[raft,etcd,consul]
+      - docopt
+      - pyroute2
+      - psycopg2-binary

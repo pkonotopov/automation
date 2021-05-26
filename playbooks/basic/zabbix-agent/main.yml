@@ -1,0 +1,76 @@
+- name: "Apply Zabbix Agent role"
+  hosts: '{{ target | default ("zabbix_agent") }}'
+  gather_facts: true
+
+  vars:
+    zabbix_agent_deployment:
+      - { name: "disk_stats" }
+      - { name: "timedatectl" }
+      - { name: "patroni_monitoring", python_prereqs: ["psycopg2-binary", "requests"], }
+
+  pre_tasks:
+    - name: Set inventory hostname.
+      hostname:
+        name: "{{ (inventory_hostname) | replace('.','-') }}"
+      become: true
+
+    - name: Set locale
+      template:
+        src: environment.j2
+        dest: /etc/environment
+        owner: root
+        group: root
+      become: true
+
+    - name: Add epel-release repository
+      yum:
+        name: epel-release
+        state: present
+      become: true
+
+    - name: Install python3 and dependecies
+      yum:
+        name:
+          - python3
+          - python3-devel
+          - python3-pip
+          - python3-psycopg2
+          - python3-setuptools
+          - python3-psutil
+          - python3-urllib3
+      become: true
+
+    - name: "Add additional_zabbix_agent_deployment"
+      set_fact:
+        zabbix_agent_deployment: "{{ zabbix_agent_deployment }}"
+      tags: always
+      when: "zabbix_agent_deployment | length > 0"
+
+  roles:
+    - role: "community.zabbix.zabbix_agent"
+      ignore_errors: true
+
+  handlers:
+    - name: "Restart Zabbix Agent"
+      service:
+        name: "zabbix-agent"
+        state: "restarted"
+      become: true
+
+  post_tasks:
+    - name: "Deploy script"
+      include_tasks: "deploy_one_script.yml"
+      loop: "{{ zabbix_agent_deployment }}"
+      loop_control:
+        loop_var: "deployment"
+        label: "{{ deployment.name }}"
+      when: "deployment.condition is not defined or deployment.condition == true"
+      tags: 'deploy'
+
+    - name: "Set Zabbix Agent service status"
+      service:
+        name: "zabbix-agent"
+        enabled: "{{ zabbix_agent_service_enabled | default(false) }}"
+        state: '{{ zabbix_agent_service_state | default("stopped") }}'
+      become: true
+      tags: always

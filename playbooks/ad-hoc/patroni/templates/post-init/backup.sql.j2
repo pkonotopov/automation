@@ -1,0 +1,33 @@
+--
+-- Setup user backup for taking backups
+--
+-- Create user backup
+CREATE USER {{ backup_user_name }} LOGIN ENCRYPTED PASSWORD '{{ backup_user_password }}';
+
+-- Grant permissions
+GRANT USAGE ON SCHEMA pg_catalog TO {{ backup_user_name }};
+
+GRANT pg_read_all_settings TO {{ backup_user_name }};
+
+GRANT EXECUTE ON FUNCTION pg_start_backup(text, boolean, boolean) TO {{ backup_user_name }};
+
+GRANT EXECUTE ON FUNCTION pg_stop_backup(boolean, boolean) TO {{ backup_user_name }};
+
+GRANT EXECUTE ON FUNCTION pg_stop_backup() TO {{ backup_user_name }};
+
+--check options
+GRANT EXECUTE ON FUNCTION pg_create_restore_point(text) TO {{ backup_user_name }};
+
+GRANT EXECUTE ON FUNCTION pg_switch_wal () TO {{ backup_user_name }};
+
+-- Grant extra permissions if needed
+GRANT EXECUTE ON FUNCTION current_setting(text) TO {{ backup_user_name }};
+
+GRANT EXECUTE ON FUNCTION pg_is_in_recovery() TO {{ backup_user_name }};
+
+GRANT EXECUTE ON FUNCTION txid_current() TO {{ backup_user_name }};
+
+GRANT EXECUTE ON FUNCTION txid_current_snapshot() TO {{ backup_user_name }};
+
+GRANT EXECUTE ON FUNCTION txid_snapshot_xmax(txid_snapshot) TO {{ backup_user_name }};
+
