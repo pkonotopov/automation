@@ -2,6 +2,6 @@
 all:
   hosts:
     node1:
-      ansible_host: 192.168.0.100
+      ansible_host: 192.168.26.216
     node2:
-      ansible_host: 192.168.0.101
+      ansible_host: 192.168.26.215

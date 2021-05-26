@@ -1,14 +1,14 @@
 ---
 # Possible values: etcd, raft, consul
 
-used_dcs_system: "consul"
-patroni_cluster_name: "cluster-nonprod-01"
+used_dcs_system: "etcd"
+patroni_cluster_name: "test-id-00"
 
 # Setting encoding
 encoding: "en_US.UTF-8"
 
 # Network
-CIDR: 192.168.0.0/24
+CIDR: 192.168.26.0/24
 
 # postgres related var, some values are coming from the main.yml
 

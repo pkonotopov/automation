@@ -1,6 +1,6 @@
 ---
 zabbix_agent_version: "5.2"
-zabbix_agent_serveractive: "my.zabbix.server"
+zabbix_agent_serveractive: "konotop-pc.l.postgrespro.ru"
 zabbix_agent_hostmetadata: "env={{ target_environment }};groups=db,linux"
 zabbix_agent_startagents: 0
 zabbix_install_pip_packages: false

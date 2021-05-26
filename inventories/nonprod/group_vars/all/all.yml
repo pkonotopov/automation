@@ -3,5 +3,5 @@ env: "nonprod"
 ansible_environment: "nonprod"
 target_environment: "nonprod"
 
-INTERNAL_CIDR: "192.168.0.0/24"
+INTERNAL_CIDR: "192.168.26.0/24"
 encoding: "en_US.UTF-8"

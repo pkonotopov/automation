@@ -11,8 +11,10 @@ pgbackrest_paths:
 
 pgbackrest_systemd_units:
   - pg_diff_backup.service
-  - pg_diff_backup.timer
   - pg_full_backup.service
+
+pgbackrest_systemd_timers:
+  - pg_diff_backup.timer
   - pg_full_backup.timer
 
 pgbackrest_owner: postgres

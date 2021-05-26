@@ -41,7 +41,7 @@
         mode: +x
       become: true
 
-    - name: Add pgbackrest systemd units.
+    - name: Add pgbackrest systemd unit filess.
       template:
         src: systemd/{{ item }}.j2
         dest: /etc/systemd/system/{{ item }}
@@ -51,6 +51,16 @@
       with_items: "{{ pgbackrest_systemd_units | default([]) }}"
       become: true
 
+    - name: Add pgbackrest systemd timer files.
+      template:
+        src: systemd/{{ item }}.j2
+        dest: /etc/systemd/system/{{ item }}
+        owner: root
+        group: root
+        mode: 0755
+      with_items: "{{ pgbackrest_systemd_timers | default([]) }}"
+      become: true
+
     - name: Init pgbackrest backup repository
       command: "/usr/bin/pgbackrest --config-path={{ pgbackrest_conf_path }} --stanza={{ pgbackrest_stanza_name }} stanza-create" 
       environment:
@@ -58,12 +68,20 @@
       become_user: "{{ pgbackrest_owner }}"
       become: true
 
-    - name: Start timers and services.
+    - name: Add services for full and diff backups.
+      systemd:
+        name: "{{ item }}"
+        enabled: yes
+        state: stopped
+        masked: no
+      with_items: "{{ pgbackrest_systemd_units | default([]) }}"
+      become: true
+
+    - name: Add and start timers.
       systemd:
         name: "{{ item }}"
         enabled: yes
         state: started
         masked: no
-      with_items: "{{ pgbackrest_systemd_units | default([]) }}"
+      with_items: "{{ pgbackrest_systemd_timers | default([]) }}"
       become: true
-

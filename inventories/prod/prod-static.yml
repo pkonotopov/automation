@@ -1,10 +1,11 @@
----
-postgres:
+all:
   hosts:
     node1:
+      ansible_host: 10.177.0.51
     node2:
+      ansible_host: 10.177.0.52
 
-cluster-prod-01:
+postgres:
   hosts:
     node1:
     node2:

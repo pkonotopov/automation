@@ -5,5 +5,5 @@
 *.pyc
 */.settings/
 .idea
-.DC_Store
+.DS_Store
 ___*.yml

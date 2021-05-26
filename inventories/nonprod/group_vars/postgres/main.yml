@@ -6,8 +6,8 @@ postgresql_group: postgres
 
 postgresql_enablerepo: pgdg13,pgdg13-updates-debuginfo
 
-postgresql_data_dir: "/var/lib/pgsql/13/data/"
-postgresql_bin_path: "/usr/pgsql-13/bin/"
+postgresql_data_dir: "/var/lib/pgsql/13/data"
+postgresql_bin_path: "/usr/pgsql-13/bin"
 postgresql_config_path: "{{ postgresql_data_dir }}"
 
 postgresql_daemon: postgresql-13.service

@@ -11,6 +11,25 @@
       become: true
 
   tasks:
+    - name: Populate service facts
+      service_facts:
+
+    - name: Stop patroni service if started.
+      systemd:
+        name: patroni
+        enabled: yes
+        state: stopped
+        masked: no
+      become: true
+      when: "'patroni' in services"
+
+    - name: Remove $PGDATA contents before Patroni installation
+      file:
+        state: absent
+        path: "{{ postgresql_data_dir }}"
+      become: yes
+      when: "'patroni' in services"
+
     - name: Create folders
       file:
         path: "{{ item }}"

@@ -11,7 +11,7 @@ In order to use the automation scripts, you should perform the initial configura
 
 ### 1.1 Setting up ansible configuration file
 
-Here is an example of ansible configuration file - [`ansible.cfg`](ansible.cfg). You need to set the values of the following parameters:
+Here is an example of ansible configuration file - [`ansible.cfg`](./ansible.cfg). You need to set the values of the following parameters:
 
 * `ansible_user` and `remote_user` - the name of the user under whom the deployment process will be carried out;
 * `ansible_ssh_private_key_file` - private ssh key for password free access to the configured nodes;
@@ -83,7 +83,7 @@ The structure of the catalog is given above.
 The group_vars directory contains the subdirectories [`all`](inventories/nonprod/group_vars/all/) and [`postgres`](inventories/nonprod/group_vars/postgres), as well as the `inventory.yml` and `nonprod-static.yml` files.
 
 The file `inventory.yml` lists **all the hosts** that we deploy to, in the file `nonprod-static.yml` these hosts are distributed into groups. The `postgres` host group includes two hosts `node1` and `node2` on which PostgreSQL 13, Patroni cluster, zabbix agents, pgBackRest and mamonsu should be deployed.
-The `group_vars` folder has two subdirectories `all` and `postgres`. The `all` directory contains two files `all.yml` and `zabbix.yml` which contain variables for roles and playbooks relevant to **all hosts**.
+The `group_vars` folder has two subdirectories `all` and `postgres`. The `all` directory contains two files `all.yml` and `zabbix_agent.yml` which contain variables for roles and playbooks relevant to **all hosts**.
 
 The `postgres` directory contains the files `main.yml`, `patroni.yml`, `pgbackrest.yml`, and `mamonsu.yml`. These files contain variables relevant to the corresponding playbooks. 
 When we start the deploy process, the ansible looks at which host group we are applying the playbook to, searches the inventory for that host group, searches the group variables for the directory with the host group name, reads the variables from the `.yml` files from that directory and uses them in the playbook.
