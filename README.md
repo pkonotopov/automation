@@ -166,21 +166,21 @@ A list of variables that must be defined:
 
 #### 1.4.1 Common variables
 
-File [`all.yml`](nonprod/group_vars/all/all.yml), subnet and encoding used:
+File [`all.yml`](inventories/nonprod/group_vars/all/all.yml), subnet and encoding used:
 
 * `INTERNAL_CIDR: "192.168.26.0/24"`
 * `encoding: "en_US.UTF-8"`
 
 #### 1.4.2 Zabbix Agent
 
-File [`zabbix_agent.yml`](nonprod/group_vars/all/zabbix_agent.yml):
+File [`zabbix_agent.yml`](inventories/nonprod/group_vars/all/zabbix_agent.yml):
 
 * `zabbix_agent_serveractive: "my.zabbix.server.fqdn.or.ip"` - Zabbix server address
 * `zabbix_agent_hostmetadata: "env=environment;groups=group_one,groups_two"` - actual metadata for the host
 
 #### 1.4.3 PostgreSQL
 
-File [`main.yml`](nonprod/group_vars/postgres/main.yml):
+File [`main.yml`](inventories/nonprod/group_vars/postgres/main.yml):
 
 * `postgresql_data_dir` - PG database folder.
 * `postgresql_bin_path` - path to the PG binary files.
@@ -189,7 +189,7 @@ File [`main.yml`](nonprod/group_vars/postgres/main.yml):
 
 #### 1.4.4 Patroni
 
-File [`patroni.yml`](nonprod/group_vars/postgres/patroni.yml):
+File [`patroni.yml`](inventories/nonprod/group_vars/postgres/patroni.yml):
 
 * `patroni_cluster_name: "my-cluster-name"` - the cluster name definition.
 * `used_dcs_system: etcd` - available values: `etcd`, `consul`, `raft`.
@@ -198,14 +198,14 @@ File [`patroni.yml`](nonprod/group_vars/postgres/patroni.yml):
 
 #### 1.4.5 pgBackRest
 
-File [`pgbackrest.yml`](nonprod/group_vars/postgres/pgbackrest.yml):
+File [`pgbackrest.yml`](inventories/nonprod/group_vars/postgres/pgbackrest.yml):
 
 * `pgbackrest_repo_path: "/path/to/the/backup/repository"` - path to the backup repository.
 * `pgbackrest_stanza_name: "my-stanza"` - name of the pgBackRest repo.
 
 #### 1.4.6 Mamonsu
 
-File [`mamonsu.yml`](nonprod/group_vars/postgres/mamonsu.yml):
+File [`mamonsu.yml`](inventories/nonprod/group_vars/postgres/mamonsu.yml):
 
 * `superuser_name` - superuser name
 * `superuser_password` - superuser password for the mamonsu bootstrap.
