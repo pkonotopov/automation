@@ -9,6 +9,8 @@ In order to use the automation scripts, you should perform the initial configura
 * Setting up dependencies (community roles).
 * Setting variable values.
 
+We are using Ansible >= 2.11+.
+
 ### 1.1 Setting up ansible configuration file
 
 Here is an example of ansible configuration file - [`ansible.cfg`](./ansible.cfg). You need to set the values of the following parameters:
