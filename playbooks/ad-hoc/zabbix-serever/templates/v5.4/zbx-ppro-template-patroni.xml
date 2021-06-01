@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.4</version>
+    <date>2021-06-01T10:41:41Z</date>
+    <groups>
+        <group>
+            <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>110094515402405787e82d9f3753ce64</uuid>
+            <template>Template Patroni Monitoring</template>
+            <name>Template Patroni Monitoring</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>3d0a19cc17424c2a822ac6e6813495b4</uuid>
+                    <name>Patroni cluster unlocked</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.cluster_unlocked</key>
+                    <delay>0</delay>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.cluster_unlocked</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>357660bbda3e4387a0b33b1c6ba7c2ad</uuid>
+                    <name>Patroni db port check failed cluster members</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.db_port_check_failed_cluster_members</key>
+                    <delay>0</delay>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.db_port_check_failed_cluster_members</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>96236e2bf28d45758c1da4660e02a618</uuid>
+                    <name>Patroni node's configuration</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>patroni.get.config[{HOST.IP}]</key>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>11100dd7a552446a8f43904db00ae289</uuid>
+                            <expression>change(/Template Patroni Monitoring/patroni.get.config[{HOST.IP}])&lt;&gt;0</expression>
+                            <name>Patroni configuration changed on {HOST.NAME}</name>
+                            <url>https://wiki</url>
+                            <priority>INFO</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Could not receive any data from Patroni on {HOST.NAME}</name>
+                                    <expression>nodata(/Template Patroni Monitoring/patroni.get.node_info[{HOST.IP}],10m)&lt;&gt;0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>team</tag>
+                                    <value>Operations-DBA</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>35c0e1b454be4aa7b96f2ab164d9f72e</uuid>
+                    <name>Patroni node's collected data</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>patroni.get.node_info[{HOST.IP}]</key>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>ce2c7478322942049a0a5cc9a9a98a14</uuid>
+                            <expression>nodata(/Template Patroni Monitoring/patroni.get.node_info[{HOST.IP}],10m)&lt;&gt;0</expression>
+                            <name>Could not receive any data from Patroni on {HOST.NAME}</name>
+                            <url>https://wiki</url>
+                            <priority>HIGH</priority>
+                            <description>Patroni may be down</description>
+                            <dependencies>
+                                <dependency>
+                                    <name>Patroni monitoring script doesn't work on {HOST.NAME}</name>
+                                    <expression>max(/Template Patroni Monitoring/patroni.monitoring_state,5m)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>team</tag>
+                                    <value>Operations-DBA</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>2108c59b32d74e8bb1f8b2a7f0e992b7</uuid>
+                    <name>Patroni monitoring last error</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.monitoring_error</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.patroni_monitoring_error</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>3318c24fbbf341158e4d9896c7b91599</uuid>
+                    <name>Patroni monitoring state</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.monitoring_state</key>
+                    <delay>0</delay>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.patroni_monitoring_state</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>1f60f38480da4a49a0ba2ae121f1e1f8</uuid>
+                            <expression>max(/Template Patroni Monitoring/patroni.monitoring_state,5m)=0</expression>
+                            <name>Patroni monitoring script doesn't work on {HOST.NAME}</name>
+                            <url>https://wiki</url>
+                            <priority>HIGH</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Zabbix agent on {HOST.NAME} is unreachable for 5 minutes</name>
+                                    <expression>nodata(/Linux by Zabbix agent active/agent.ping,5m)=1</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>team</tag>
+                                    <value>Operations-Monitoring</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>022b7c66029c4b48bff6468698a403c2</uuid>
+                    <name>Patroni agent role</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.role</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.role</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>e1d92e36cd124549b52374fbe7ac1681</uuid>
+                    <name>Patroni agent scope</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.scope</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.patroni.scope</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>5m</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>f48101dfbf2c46838ea87f3a293bc39a</uuid>
+                    <name>Patroni agent state</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.state</key>
+                    <delay>0</delay>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.state</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>a6e5f525c4e14b98899ddb56c606fd22</uuid>
+                            <expression>max(/Template Patroni Monitoring/patroni.state,5m)=0</expression>
+                            <name>Patroni agent is down on {HOST.NAME}</name>
+                            <url>https://wiki</url>
+                            <priority>HIGH</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Could not receive any data from Patroni on {HOST.NAME}</name>
+                                    <expression>nodata(/Template Patroni Monitoring/patroni.get.node_info[{HOST.IP}],10m)&lt;&gt;0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>team</tag>
+                                    <value>Operations-DBA</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>6336eed24a324361936f4456cf0de356</uuid>
+                    <name>Patroni agent version</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.version</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.patroni.version</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>5m</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>4edbd225539044b1b03b6c4f9e9d24be</uuid>
+                    <name>Patroni visible cluster members</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.visible_cluster_members</key>
+                    <delay>0</delay>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.visible_cluster_members</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.get.node_info[{HOST.IP}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>f4136822453849408996da9cd4f54229</uuid>
+                            <expression>change(/Template Patroni Monitoring/patroni.visible_cluster_members)&lt;&gt;0</expression>
+                            <name>Patroni visible cluster members changed on {HOST.NAME}</name>
+                            <url>https://wiki</url>
+                            <priority>HIGH</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Could not receive any data from Patroni on {HOST.NAME}</name>
+                                    <expression>nodata(/Template Patroni Monitoring/patroni.get.node_info[{HOST.IP}],10m)&lt;&gt;0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>team</tag>
+                                    <value>Operations-DBA</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <valuemaps>
+                <valuemap>
+                    <uuid>c13478e4d15f4917b7931bcf29b5aa2c</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <uuid>1d05c414161f4d02abfbae6f844c5ae4</uuid>
+            <expression>min(/Template Patroni Monitoring/patroni.db_port_check_failed_cluster_members,16m)&gt;0 and length(last(/Template Patroni Monitoring/patroni.monitoring_error))&lt;&gt;-1</expression>
+            <name>Patroni cluster member db is unreachable on {HOST.NAME}</name>
+            <url>https://wiki</url>
+            <priority>AVERAGE</priority>
+            <dependencies>
+                <dependency>
+                    <name>Could not receive any data from Patroni on {HOST.NAME}</name>
+                    <expression>nodata(/Template Patroni Monitoring/patroni.get.node_info[{HOST.IP}],10m)&lt;&gt;0</expression>
+                </dependency>
+            </dependencies>
+            <tags>
+                <tag>
+                    <tag>team</tag>
+                    <value>Operations-DBA</value>
+                </tag>
+            </tags>
+        </trigger>
+    </triggers>
+</zabbix_export>

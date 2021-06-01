@@ -17,19 +17,38 @@ class Activity(Plugin):
 
     AgentPluginType = 'pg'
 
-    key_pg_stat_activity = 'pgsql.stat.activity{0}'
+    key_pg_stat_activity = 'pgsql.pg_stat_activity.discovery{0}'
+    key_pg_stat_activity_count = 'pgsql.pg_stat_activity.discovery.count[{0}]'
+    key_pg_stat_activity_duration = 'pgsql.pg_stat_activity.discovery.duration[{0}]'
+    key_pg_stat_activity_query_zbx = 'pgsql.pg_stat_activity.discovery.query[{0}]'
 
-    key_pg_stat_activity_query = "select coalesce(json_agg(pg_stat_activity),'[]'::json)"\
-        "from pg_stat_activity where query not in ('commit;','') " \
-        "and backend_type = 'client backend'"
+    key_pg_stat_activity_query = "SELECT md5(query) as id, query, datname, application_name, sum(extract(epoch from(now() - query_start))) AS duration, count(1) as count, state FROM pg_stat_activity WHERE query !~* '^commit|^end|^begin|^show|^set|^$' GROUP BY id, query, datname, application_name,state"
+
 
     def run(self, zbx):
 
-        result = Pooler.query(self.key_pg_stat_activity_query)
-        q = json.dumps(result)
+        discovery = []
 
-        # print(type(q))
-        zbx.send(self.key_pg_stat_activity.format('[]'), str(q))
+        result = Pooler.query(self.key_pg_stat_activity_query)
+
+        for row in result:
+
+            id = row[0]
+            key = '{},{},{},{}'.format(id,row[2],row[3],row[6])
+
+            zbx.send(self.key_pg_stat_activity_count.format(key),row[5])
+            zbx.send(self.key_pg_stat_activity_duration.format(key),row[4])
+            zbx.send(self.key_pg_stat_activity_query_zbx.format(key),row[1])
+
+            discovery.append({
+                '{' + '#ID}': id,
+                '{' + '#QUERY}': row[1],
+                '{' + '#DATNAME}': row[2],
+                '{' + '#APP}': row[3],
+                '{' + '#STATE}': row[6]
+            })
+
+        zbx.send(self.key_pg_stat_activity.format('[]'), json.dumps(discovery))
 
     def items(self, template):
 
