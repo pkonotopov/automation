@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.4</version>
+    <date>2021-06-03T14:50:07Z</date>
+    <groups>
+        <group>
+            <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>6d7542d3a8ce4ff5a649f709af402dfe</uuid>
+            <template>Template Disk Performance</template>
+            <name>Template Disk Performance</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>93cc399d6c3f497f9b16ba1b08bc49bb</uuid>
+                    <name>Disk discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>custom.vfs.discover_disks</key>
+                    <delay>3600</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>c5c4d5b994d04773ac81cb6616c338cd</uuid>
+                            <name>Disk:$1:IO:Currently Active</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.io.active[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>io</units>
+                            <description>Field #12
+Number of I/Os currently in progress.
+The only field that should go to zero. Incremented as requests are given to appropriate struct request_queue and decremented as they finish.</description>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>8f61fd220b5e4240a5d1cf7243c8ed43</uuid>
+                            <name>Disk:$1:IO:ms</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.io.ms[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>ms</units>
+                            <description>Field #13
+Number of milliseconds spent doing I/Os. This field increases so long as field #12 (custom.vfs.dev.io.active) is nonzero.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>8014713eb7804d1a879fbb245220df27</uuid>
+                            <name>Disk:$1:Read:Merged</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.read.merged[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>Ops/s</units>
+                            <description>Field #5
+Number of reads merged.
+Reads and writes which are adjacent to each other may be merged for efficiency. Thus two 4K reads may become one 8K read before it is ultimately handed to the disk, and so it will be counted (and queued) as only one I/O.  This field lets you know how often this was done.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>c57223258c3d45729002ff02a94dc46f</uuid>
+                            <name>Disk:$1:Read:ms</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.read.ms[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>ms</units>
+                            <description>Field #7
+Number of milliseconds spent reading
+This is the total number of milliseconds spent by all reads (as measured from __make_request() to end_that_request_last()).</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>242684cce87441a19bd49c8c4e0f011e</uuid>
+                            <name>Disk:$1:Read:Ops per second</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.read.ops[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>ops/s</units>
+                            <description>Field #4
+This is the total number of reads completed successfully.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>a0991a540df9438db646d564703e074d</uuid>
+                            <name>Disk:$1:Read:Bytes/sec</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.read.sectors[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>B/sec</units>
+                            <description>Field #6
+This is the total number of sectors read successfully.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>512</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>b45814dd229a4e4ab7123f84e4af72c1</uuid>
+                            <name>Disk:$1:IO:Weight:ms</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.weight.io.ms[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>ms</units>
+                            <description>Field #14
+Weighted number of milliseconds spent doing I/Os.
+This field is incremented at each I/O start, I/O completion, I/O merge, or read of these stats by the number of I/Os in progress (field 12) times the number of milliseconds spent doing I/O since the last update of this field.  This can provide an easy measure of both I/O completion time and the backlog that may be accumulating.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d96b4dfbe20e4f08bd7b2830d6ea7b65</uuid>
+                            <name>Disk:$1:Write:Merged</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.write.merged[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>Ops/s</units>
+                            <description>Field #9
+Number of writes merged.
+Reads and writes which are adjacent to each other may be merged for efficiency. Thus two 4K reads may become one 8K read before it is ultimately handed to the disk, and so it will be counted (and queued) as only one I/O.  This field lets you know how often this was done.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>488294e858a548d1bbf344cf692d754b</uuid>
+                            <name>Disk:$1:Write:ms</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.write.ms[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>ms</units>
+                            <description>Field #11
+Number of milliseconds spent writing.
+This is the total number of milliseconds spent by all writes (as measured from __make_request() to end_that_request_last()).</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>9db77c7556274354b7414780d352bbb9</uuid>
+                            <name>Disk:$1:Write:Ops per second</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.write.ops[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>ops/s</units>
+                            <description>Field #8
+This is the total number of writes completed successfully.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>5467712e15934793aa8018abd99aeb34</uuid>
+                            <name>Disk:$1:Write:Bytes/sec</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>custom.vfs.dev.write.sectors[{#DEVICENAME}]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>B/sec</units>
+                            <description>Field #10
+This is the total number of sectors written successfully.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>512</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>bd8a309c65e7478ab4c9110cab0483ba</uuid>
+                            <name>Disk:$1:Read:Ops per second [z]</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>vfs.dev.read[{#DEVICENAME},operations]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>ops/s</units>
+                            <description>This is the total number of reads completed successfully.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>443c1e4677714176a4de27f240fca61a</uuid>
+                            <name>Disk:$1:Read:ms [z]</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>vfs.dev.read[{#DEVICENAME},ops]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>ms</units>
+                            <description>This is the total number of milliseconds spent by all reads (as measured from __make_request() to end_that_request_last()).</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>2e466be9fd43463cbf0f8a2d9040d7bc</uuid>
+                            <name>Disk:$1:Read:Bytes/sec [z]</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>vfs.dev.read[{#DEVICENAME},sectors]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>B/sec</units>
+                            <description>This is the total number of sectors read successfully.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>512</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>fc5a50064cde49a7b2aa271bb3ec0fba</uuid>
+                            <name>Disk:$1:Write:Ops per second [z]</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>vfs.dev.write[{#DEVICENAME},operations]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>ops/s</units>
+                            <description>This is the total number of reads completed successfully.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>99c09a29aaab42cbadc678d443b18e35</uuid>
+                            <name>Disk:$1:Write:ms [z]</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>vfs.dev.write[{#DEVICENAME},ops]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>ms</units>
+                            <description>This is the total number of milliseconds spent by all reads (as measured from __make_request() to end_that_request_last()).</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>a894c70d6b284279b147cd6b5e2bf2c9</uuid>
+                            <name>Disk:$1:Write:Bytes/sec [z]</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>vfs.dev.write[{#DEVICENAME},sectors]</key>
+                            <delay>60</delay>
+                            <history>30d</history>
+                            <units>B/sec</units>
+                            <description>This is the total number of sectors read successfully.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>512</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Disk Performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>6090dc2ed33043a68437b4fc03639e75</uuid>
+                            <name>Disk {#DEVICENAME} - Bytes/second</name>
+                            <ymin_type_1>FIXED</ymin_type_1>
+                            <graph_items>
+                                <graph_item>
+                                    <drawtype>GRADIENT_LINE</drawtype>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.read.sectors[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>GRADIENT_LINE</drawtype>
+                                    <color>C80000</color>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.write.sectors[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>b05666b30bc14fc4b2374cba9996f8fe</uuid>
+                            <name>Disk {#DEVICENAME} - Merged</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.read.merged[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>C80000</color>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.write.merged[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>e0859655571046859768510feabc37b2</uuid>
+                            <name>Disk {#DEVICENAME} - Ops/second</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.read.ops[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>C80000</color>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.write.ops[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>e3eda2a5b58b412388ee7a7434aac6a7</uuid>
+                            <name>Disk {#DEVICENAME} - Overview</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C8C8</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.io.active[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>C8C800</color>
+                                    <yaxisside>RIGHT</yaxisside>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.read.sectors[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>960000</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.read.merged[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>3</sortorder>
+                                    <color>C8C8C8</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.read.ops[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>4</sortorder>
+                                    <yaxisside>RIGHT</yaxisside>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.write.sectors[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>5</sortorder>
+                                    <color>960096</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.write.merged[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>6</sortorder>
+                                    <color>000096</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Disk Performance</host>
+                                        <key>custom.vfs.dev.write.ops[{#DEVICENAME}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>

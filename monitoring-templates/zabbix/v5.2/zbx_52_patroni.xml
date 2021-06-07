@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>4.4</version>
-    <date>2020-12-18T08:50:13Z</date>
+    <version>5.2</version>
+    <date>2021-06-07T07:37:51Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -35,11 +35,15 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.cluster_unlocked</params>
+                            <parameters>
+                                <parameter>$.cluster_unlocked</parameter>
+                            </parameters>
                         </step>
                         <step>
                             <type>BOOL_TO_DECIMAL</type>
-                            <params/>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>
@@ -59,7 +63,9 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.db_port_check_failed_cluster_members</params>
+                            <parameters>
+                                <parameter>$.db_port_check_failed_cluster_members</parameter>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>
@@ -134,7 +140,9 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.patroni_monitoring_error</params>
+                            <parameters>
+                                <parameter>$.patroni_monitoring_error</parameter>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>
@@ -157,7 +165,9 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.patroni_monitoring_state</params>
+                            <parameters>
+                                <parameter>$.patroni_monitoring_state</parameter>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>
@@ -179,7 +189,9 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.role</params>
+                            <parameters>
+                                <parameter>$.role</parameter>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>
@@ -201,11 +213,15 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.patroni.scope</params>
+                            <parameters>
+                                <parameter>$.patroni.scope</parameter>
+                            </parameters>
                         </step>
                         <step>
                             <type>DISCARD_UNCHANGED_HEARTBEAT</type>
-                            <params>5m</params>
+                            <parameters>
+                                <parameter>5m</parameter>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>
@@ -228,7 +244,9 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.state</params>
+                            <parameters>
+                                <parameter>$.state</parameter>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>
@@ -264,11 +282,15 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.patroni.version</params>
+                            <parameters>
+                                <parameter>$.patroni.version</parameter>
+                            </parameters>
                         </step>
                         <step>
                             <type>DISCARD_UNCHANGED_HEARTBEAT</type>
-                            <params>5m</params>
+                            <parameters>
+                                <parameter>5m</parameter>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>
@@ -288,7 +310,9 @@
                     <preprocessing>
                         <step>
                             <type>JSONPATH</type>
-                            <params>$.visible_cluster_members</params>
+                            <parameters>
+                                <parameter>$.visible_cluster_members</parameter>
+                            </parameters>
                         </step>
                     </preprocessing>
                     <master_item>

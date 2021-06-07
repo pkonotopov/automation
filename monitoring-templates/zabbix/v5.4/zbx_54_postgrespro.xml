@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.4</version>
-    <date>2021-06-01T10:40:02Z</date>
+    <date>2021-06-03T14:48:54Z</date>
     <groups>
         <group>
             <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
@@ -1206,6 +1206,25 @@
                             <value>App-PostgresPro-Linux</value>
                         </tag>
                     </tags>
+                </item>
+                <item>
+                    <uuid>5678eb89666e4418b4022c835a0268b1</uuid>
+                    <name>PostgreSQL: pg_stat_activity dump</name>
+                    <type>TRAP</type>
+                    <key>pgsql.pg_stat_activity.dump[]</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                </item>
+                <item>
+                    <uuid>67f0f8a62199440d9862b01a01d4bac0</uuid>
+                    <name>PostgreSQL: pg_stat_statements dump</name>
+                    <type>TRAP</type>
+                    <key>pgsql.pg_stat_statements.dump[]</key>
+                    <delay>0</delay>
+                    <history>14d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
                 </item>
                 <item>
                     <uuid>0a261dc941764e5ea100f3de163b167e</uuid>

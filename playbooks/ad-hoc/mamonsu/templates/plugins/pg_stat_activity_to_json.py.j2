@@ -1,0 +1,53 @@
+#!/bin/env python3
+#
+# Mamonsu plugin for pg_stat_activity
+# dumps pg_stat_activity to Zabbix metric
+#
+
+from mamonsu.plugins.pgsql.plugin import PgsqlPlugin as Plugin
+from mamonsu.plugins.pgsql.pool import Pooler
+import json
+
+
+class ActivityJson(Plugin):
+
+    DEFAULT_CONFIG = {
+        'enabled': str(True)
+    }
+    Interval = 10
+
+    AgentPluginType = 'pg'
+    key_pg_stat_activity_dump = 'pgsql.pg_stat_activity.dump{0}'
+
+    key_pg_stat_activity_dump_query = "WITH activity AS (SELECT row_number() OVER () AS id, datid::int,datname::text,pid::int,leader_pid::int,usesysid::text, usename::text, application_name::text,client_addr::text, client_hostname::text, client_port::int,backend_start::text, xact_start::text, query_start::text,state_change::text, wait_event_type::text, wait_event::text,state::text, backend_xid::text, backend_xmin::text, query::text,backend_type::text from pg_stat_activity) SELECT coalesce(json_agg(activity),'[]'::json) from activity"
+
+    def run(self, zbx):
+
+        my_dict = []
+
+        result = Pooler.query(self.key_pg_stat_activity_dump_query)
+
+        for e in result[0][0]:
+            my_dict.append(e)
+
+        zbx.send(self.key_pg_stat_activity_dump.format(
+            '[]'), json.dumps(my_dict))
+
+    def items(self, template):
+
+        result = ''
+
+        if self.Type == "mamonsu":
+            delay = self.plugin_config('interval')
+            value_type = Plugin.VALUE_TYPE.text
+        else:
+            delay = 5  # TODO check delay
+            value_type = Plugin.VALUE_TYPE.numeric_unsigned
+
+        result += template.item({
+            'name': 'PostgreSQL: pg_stat_activity dump',
+            'key': self.right_type(self.key_pg_stat_activity),
+            'delay': delay,
+            'value_type': value_type
+        })
+        return result

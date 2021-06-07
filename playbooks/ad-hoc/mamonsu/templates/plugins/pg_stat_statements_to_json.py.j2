@@ -1,0 +1,55 @@
+#!/bin/env python3
+#
+# Mamonsu plugin for pg_stat_statements
+# dumps pg_stat_statements to Zabbix metric
+#
+
+from mamonsu.plugins.pgsql.plugin import PgsqlPlugin as Plugin
+from mamonsu.plugins.pgsql.pool import Pooler
+import json
+
+
+class StatementsJson(Plugin):
+
+    DEFAULT_CONFIG = {
+        'enabled': str(True)
+    }
+    Interval = 60
+
+    AgentPluginType = 'pg'
+    key_pg_stat_statements_dump = 'pgsql.pg_stat_statements.dump{0}'
+
+    key_pg_stat_statements_dump_query = "WITH statements as ( SELECT query, calls, ROUND(min_exec_time::numeric,2)::bigint AS min_calls, ROUND(mean_exec_time::NUMERIC, 2)::bigint AS avg_calls, ROUND(min_exec_time:: NUMERIC,2)::bigint AS max_calls, ROUND(rows/calls)::bigint AS rows_ret, ROUND(total_exec_time::NUMERIC, 2)::bigint AS total_time, ROUND((100 * total_exec_time / SUM(total_exec_time::NUMERIC) OVER ())::NUMERIC, 2)::bigint AS percentage_cpu  FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 50 ) SELECT coalesce(json_agg(statements),'[]'::json) from statements"
+
+
+    def run(self, zbx):
+
+        my_dict = []
+
+        result = Pooler.query(self.key_pg_stat_statements_dump_query)
+
+        for e in result[0][0]:
+            my_dict.append(e)
+
+        zbx.send(self.key_pg_stat_statements_dump.format(
+            '[]'), json.dumps(my_dict))
+
+
+    def items(self, template):
+
+        result = ''
+
+        if self.Type == "mamonsu":
+            delay = self.plugin_config('interval')
+            value_type = Plugin.VALUE_TYPE.text
+        else:
+            delay = 5  # TODO check delay
+            value_type = Plugin.VALUE_TYPE.numeric_unsigned
+
+        result += template.item({
+            'name': 'PostgreSQL: pg_stat_statements dump',
+            'key': self.right_type(self.key_pg_stat_statements_dump),
+            'delay': delay,
+            'value_type': value_type
+        })
+        return result

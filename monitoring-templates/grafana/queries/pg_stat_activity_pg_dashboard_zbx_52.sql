@@ -57,5 +57,6 @@ GROUP BY
     query,
     duration
 ORDER BY
-    duration DESC;
+    duration DESC
+    LIMIT 50;
 
