@@ -43,7 +43,6 @@ bootstrap:
         archive_mode: {{ patroni_archive_mode }}
         archive_timeout: {{ patroni_archive_timeout }}
         restore_command: {{ patroni_restore_command }}
-        recovery_target_timeline: 'latest'
         superuser_reserved_connections: 10
         client_min_messages: 'WARNING'
         effective_cache_size: 1GB
