@@ -3,6 +3,7 @@ mamonsu_user_name: mamonsu
 mamonsu_user_password: mamonsu
 mamonsu_database: mamonsu
 mamonsu_application_name: mamonsu
+mamonsu_log_path: /var/log/mamonsu
 mamonsu_scripts:
   - replica.py
   - pg_stat_activity_to_json.py
@@ -11,7 +12,7 @@ mamonsu_paths:
   - /etc/mamonsu
   - /etc/mamonsu/scripts
   - /etc/mamonsu/plugins
-  - /var/log/mamonsu
+  - "{{ mamonsu_log_path }}"
   - /var/run/mamonsu
 
 mamonsu_owner: mamonsu

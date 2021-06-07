@@ -2,25 +2,32 @@
 # Possible values: etcd, raft, consul
 
 used_dcs_system: "etcd"
-patroni_cluster_name: "test-id-00"
+patroni_cluster_name: "test-id-002-xxx"
 
 # Setting encoding
 encoding: "en_US.UTF-8"
 
 # Network
-CIDR: 192.168.0.0/24
+CIDR: 192.168.26.0/24
 
-# postgres related var, some values are coming from the main.yml
-
+# Postgres related vars, some values are coming from the main.yml
 postgres_bin_dir: "{{ postgresql_bin_path }}"
 postgres_database_dir: "{{ postgresql_data_dir }}"
 postgres_wal_dir: "/data/pgwal"
 postgres_db_locale: "en_US.UTF-8"
 postgres_env_file: "/etc/default/postgresql"
+postgres_socket_dir: "/var/run/postgresql"
 
+# Loggning
+postgres_log_dir: "/var/log/postgresql"
+patroni_log_dir: "/var/log/patroni"
+postgres_log_pattern: "[postgres] %t [%p]: [%l-1] app=%a,user=%u,db=%d,client=%h "
+patroni_log_pattern: "[patroni] %(asctime)s %(levelname)s: %(message)s"
+
+# PostgreSQL parameters cluster wide
 postgres_listen_address: "*"
 postgres_listen_port: "5432"
-postgres_max_connections: "100"
+postgres_max_connections: "110"
 postgres_shared_buffers: "128MB"
 postgres_shared_preload_libraries: "pg_stat_statements"
 
@@ -28,10 +35,11 @@ postgres_system_user: postgres
 postgres_system_group: postgres
 postgres_home_dir: "/var/lib/pgsql"
 
+synchronous_commit: 'remote_write'
+
 # patroni
 superuser: "postgres"
 superuser_password: "postgres"
-
 
 patroni_raft_dir: "/data/raft"
 

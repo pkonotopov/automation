@@ -40,41 +40,91 @@ bootstrap:
       use_slots: true
       parameters:
         archive_command: {{ patroni_archive_command }}
-        restore_command: {{ patroni_restore_command }}
         archive_mode: {{ patroni_archive_mode }}
         archive_timeout: {{ patroni_archive_timeout }}
-        checkpoint_timeout: 300
+        restore_command: {{ patroni_restore_command }}
+        recovery_target_timeline: 'latest'
+        superuser_reserved_connections: 10
         client_min_messages: 'WARNING'
-        effective_cache_size: '1GB'
+        effective_cache_size: 1GB
         hot_standby_feedback: 'on'
-        hot_standby: "on"
-        maintenance_work_mem: '64MB'
+        hot_standby: 'on'
+        maintenance_work_mem: 64MB
         max_connections: {{ postgres_max_connections }}
-        max_replication_slots: 4
-        max_wal_senders: 4
+        max_replication_slots: 10
+        max_wal_senders: 10
         max_worker_processes: 4
         shared_buffers: '{{ postgres_shared_buffers }}'
         shared_preload_libraries: '{{ postgres_shared_preload_libraries }}'
-        synchronous_commit: "remote_write"
+        synchronous_commit: '{{ synchronous_commit }}'
         wal_compression: 'true'
         wal_keep_segments: 30
         wal_level: replica
-        wal_log_hints: "on"
-        work_mem: '8MB'
+        max_wal_size: 4GB
+        min_wal_size: 2GB
+        work_mem: 8MB
+        # unix_socket_directories: '{{ postgres_socket_dir }}'
+        fsync: 'on'
+        wal_sync_method: fsync
+        full_page_writes: 'on'
+        wal_log_hints: 'on'
+        checkpoint_timeout: 15min
+        max_standby_archive_delay: 30s
+        max_standby_streaming_delay: 30s
+        wal_receiver_status_interval: 1s
+        #
+        # Logging settings
+        #
+        log_filename: 'postgresql-%Y-%m-%d.log'
+        log_min_duration_statement: 5000
+        log_line_prefix: '{{ postgres_log_pattern }}'
+        log_lock_waits: 'on'
+        log_replication_commands: 'off'
+        log_temp_files: 0
+        log_directory: '{{ postgres_log_dir }}'
+        log_destination: 'stderr'
+        logging_collector: 'on'
+        #
+        # Connections
+        #
+        log_connections: 'off'
+        log_disconnections: 'off'
+        log_duration: 'off'
+        #
+        # Logging level
+        #
+        log_statement: 'all'
+        log_min_messages: 'INFO'
+        log_min_error_statement: 'INFO'
+        log_error_verbosity: 'verbose'
+        log_checkpoints: 'on'
+        log_hostname: 'on'
+        log_timezone: 'UTC'
+        log_parser_stats: 'off'
+        log_planner_stats: 'off'
+        log_executor_stats: 'off'
+        log_statement_stats: 'off'
+        # Debug params
+        debug_print_parse: 'off'
+        debug_print_rewritten: 'off'
+        debug_print_plan: 'off'
+        debug_pretty_print: 'on'
 
   initdb:
-  - encoding: UTF8
-  - data-checksums
+    - encoding: UTF8
+    - data-checksums
+    - auth-host: md5
+    - auth-local: peer
 
   pg_hba:
-  - local all all md5
-  - host all all 127.0.0.1/32 md5
-  - host replication {{ replication_user_name }} 127.0.0.1/32 md5
-  - host replication {{ replication_user_name }} {{ CIDR }} md5
-  - host all {{ backup_user_name }} {{ CIDR }} md5
-  - host all {{ rewind_user_name }} {{ CIDR }} md5
-  - host all {{ mamonsu_user_name }} {{ CIDR }} md5
-  - host all all 0.0.0.0/0 md5
+    - local all all peer
+    - host all all 127.0.0.1/32 md5
+    - host replication {{ replication_user_name }} 127.0.0.1/32 md5
+    - host replication {{ replication_user_name }} {{ CIDR }} md5
+    - host all {{ backup_user_name }} {{ CIDR }} md5
+    - host all {{ rewind_user_name }} {{ CIDR }} md5
+    - host all {{ mamonsu_user_name }} {{ CIDR }} md5
+    - host all all 0.0.0.0/0 md5
 
   # setup all users here !
   post_init: /etc/patroni/post-init/post-init.sh
@@ -93,32 +143,10 @@ postgresql:
   data_dir: {{ postgres_database_dir }}
   remove_data_directory_on_rewind_failure: true
   remove_data_directory_on_diverged_timelines: true
+  use_unix_socket: true
+  # unix_socket_directories: '{{ postgres_socket_dir }}'
   pgpass: {{ postgres_home_dir }}/.pgpass
-  parameters:
-    logging_collector: 'off'
-    log_destination: 'stderr'
-    log_connections: 'off'
-    log_disconnections: 'off'
-    log_statement: 'all'
-    log_min_messages: 'INFO'
-    log_min_error_statement: 'INFO'
-    log_min_duration_statement: '0'
-    debug_print_parse: 'off'
-    debug_print_rewritten: 'off'
-    debug_print_plan: 'off'
-    debug_pretty_print: 'on'
-    log_checkpoints: 'on'
-    log_duration: 'off'
-    log_error_verbosity: 'verbose'
-    log_hostname: 'off'
-    log_line_prefix: '[postgres] %t %c %u '
-    log_lock_waits: 'off'
-    log_temp_files: '0'
-    log_timezone: 'UTC'
-    log_parser_stats: 'off'
-    log_planner_stats: 'off'
-    log_executor_stats: 'off'
-    log_statement_stats: 'off'
+
 
 # According to the documentation and current setup we have linked $PGDATA/pg_wal -> /data/pgwal
 # For this option we are provided the following options:
@@ -134,8 +162,10 @@ postgresql:
     no_params: True
 
   basebackup:
-    max-rate: '100M'
-    checkpoint: 'fast'
+    - max-rate: 100M
+    - checkpoint: fast
+    - verbose
+#    - waldir: {{ postgres_wal_dir }}
 
   # callbacks:
   #   on_role_change: 'sudo /etc/patroni/scripts/vip.py'
@@ -166,10 +196,13 @@ postgresql:
 
 log:
   level: INFO
-  format: '[patroni] %(asctime)s %(levelname)s: %(message)s'
+  format: '{{ patroni_log_pattern }}'
+  file_size: 10485760
+  file_num: 10
+  dir: {{ patroni_log_dir }}
 
 watchdog:
-  mode: off
+  mode: 'off'
   # device: {{ watchdog_device }}
   # mode: automatic
 

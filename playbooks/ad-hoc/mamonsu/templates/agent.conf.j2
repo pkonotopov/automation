@@ -30,12 +30,12 @@ address = {{ zabbix_agent_serveractive }}
 port = 10051
 
 [metric_log]
-enabled = False
-directory = /var/log/mamonsu
+enabled = True
+directory = {{ mamonsu_log_path }}
 max_size_mb = 1024
 
 [log]
-file = None
+file = {{ mamonsu_log_path }}/agent.log
 level = INFO
 format = [%(levelname)s] %(asctime)s - %(name)s	-	%(message)s
 
