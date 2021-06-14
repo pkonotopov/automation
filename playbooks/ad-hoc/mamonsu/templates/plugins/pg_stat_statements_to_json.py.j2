@@ -14,13 +14,12 @@ class StatementsJson(Plugin):
     DEFAULT_CONFIG = {
         'enabled': str(True)
     }
-    Interval = 60
+    Interval = 600
 
     AgentPluginType = 'pg'
     key_pg_stat_statements_dump = 'pgsql.pg_stat_statements.dump{0}'
 
     key_pg_stat_statements_dump_query = "SELECT coalesce(json_agg(stat), '[]'::json) FROM ( SELECT query, calls, round(min_exec_time) AS _min, round(mean_exec_time) AS _avg, round(min_exec_time) AS _max, round(ROWS / calls) AS _rows, round(total_exec_time) AS _time, (100 * total_exec_time / sum(total_exec_time) OVER ()) AS _cpu FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 50 ) stat"
-
 
     def run(self, zbx):
 

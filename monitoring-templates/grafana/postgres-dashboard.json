@@ -27,7 +27,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 31,
-  "iteration": 1623070635228,
+  "iteration": 1623678195871,
   "links": [
     {
       "asDropdown": false,
@@ -50,6 +50,20 @@
       "keepTime": false,
       "tags": [
         "linux"
+      ],
+      "targetBlank": false,
+      "title": "",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [
+        "query"
       ],
       "targetBlank": false,
       "title": "",
@@ -5888,7 +5902,7 @@
                 "properties": [
                   {
                     "id": "custom.width",
-                    "value": 1155
+                    "value": 1242
                   },
                   {
                     "id": "custom.displayMode",
@@ -5904,25 +5918,73 @@
                 "properties": [
                   {
                     "id": "custom.width",
-                    "value": 137
+                    "value": 136
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "total_calls"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 103
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Avg query duration (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 165
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "time"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 147
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Query calls"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 85
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 13,
+            "h": 8,
             "w": 22,
             "x": 0,
             "y": 12
           },
-          "id": 52,
+          "id": 58,
           "options": {
             "showHeader": true,
             "sortBy": [
               {
                 "desc": true,
-                "displayName": "Total duration (ms)"
+                "displayName": "Avg query duration (ms)"
               }
             ]
           },
@@ -5933,7 +5995,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "select \n    tm,\n    query,\n    extract(epoch from(now() - (query_start::text)::timestamptz)) as duration\n-- Parse JSON\nfrom (\nSELECT\n    tm,\n    jsonb_path_query(datax::jsonb, '$[*].query ? ( (@ !=\"\")  && ( (@starts with \"select\") || (@starts with \"with\") || (@starts with \"update\") || (@starts with \"delete\") || (@starts with \"insert\") || (@starts with \"drop\") || (@starts with \"create\") ) )') as query,\n    jsonb_path_query(datax::jsonb, '$[*].query_start ? (@ != null)') as query_start,\n    jsonb_path_query(datax::jsonb, '$[*].datname ? (@ != \"\")') as datname\n    FROM\n        -- get 1 row in JSON format from Zabbix history_text table\n        (SELECT \n            q.clock as tm,\n            lower(q.value) as datax\n        FROM \n            public.items i \n        INNER JOIN public.hosts h\n        ON\n            (\n            h.hostid = i.hostid )\n        INNER JOIN \n            public.history_text q\n        ON \n            ( \n                i.itemid = q.itemid) \n        WHERE \n            h.name = '$host'\n            AND i.name = 'PostgreSQL: pg_stat_activity dump'\n            AND $__unixEpochFilter(q.clock)\n        order by q.clock desc\n        LIMIT 1) z ) x\nwhere datname::text ~ '$database'\nAND query != 'null'\norder by duration desc\nLIMIT $limit;",
+              "rawSql": "select\n    --$__time(tm),\n    query,\n    count(query) as total_calls,\n    round(sum(duration::numeric)/count(query),2) as avg_duration\n    FROM (\nSELECT\n    tm,\n    jsonb_path_query(datax::jsonb, '$[*].query ? ( (@ !=\"\")  && ( (@starts with \"select\") || (@starts with \"with\") || (@starts with \"update\") || (@starts with \"delete\") || (@starts with \"insert\") || (@starts with \"drop\") || (@starts with \"create\") ) )') as query,\n    jsonb_path_query(datax::jsonb, '$[*].duration ? (@ != null)') as duration,\n    jsonb_path_query(datax::jsonb, '$[*].datname ? (@ != \"\")') as datname\n    FROM\n        -- get 1 row in JSON format from Zabbix history_text table\n        (\nSELECT \n    q.clock as tm,\n    lower(q.value) as datax\n  FROM \n    public.items i \n  INNER JOIN public.hosts h\n  ON\n    (\n      h.hostid = i.hostid )\n  INNER JOIN \n    public.history_text q\n  ON \n    ( \n        i.itemid = q.itemid) \n  WHERE \n    h.name = '$host'\n--h.name = 'Zabbix server'\n    AND i.name = 'PostgreSQL: pg_stat_activity dump'\n    AND $__unixEpochFilter(q.clock)\n--AND q.clock < EXTRACT(EPOCH FROM NOW()) \n--and q.clock > EXTRACT(EPOCH FROM NOW()) - 10 * 60\n--group by q.value, q.clock\n--ORDER BY q.clock DESC\n  ) x ) y\n  WHERE datname::text ~ '$database'\n  group by y.query\n  --order by tm desc\n--  limit 10\n  limit $limit\n  ;",
               "refId": "A",
               "select": [
                 [
@@ -5955,20 +6017,23 @@
               ]
             }
           ],
-          "title": "Active queries (from JSON)",
+          "title": "Active queries: ${__from:date: DD MMM, kk.mm.ss A} – ${__to:date:DD MMM, kk.mm.ss A} ",
           "transformations": [
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "query": false,
-                  "tm": true
+                  "tm": false
                 },
                 "indexByName": {},
                 "renameByName": {
+                  "avg_duration": "Avg query duration (ms)",
                   "cnt": "Total count",
                   "duration": "Total duration (ms)",
-                  "query": "Active query"
+                  "query": "Active query",
+                  "time": "Timestamp",
+                  "total_calls": "Query calls"
                 }
               }
             }
@@ -5976,7 +6041,7 @@
           "type": "table"
         }
       ],
-      "title": "Active queries",
+      "title": "Active queries statistics",
       "type": "row"
     },
     {
@@ -6028,7 +6093,7 @@
                 "properties": [
                   {
                     "id": "custom.width",
-                    "value": 540
+                    "value": 890
                   },
                   {
                     "id": "custom.displayMode",
@@ -6120,7 +6185,7 @@
                 "properties": [
                   {
                     "id": "custom.width",
-                    "value": 155
+                    "value": 149
                   }
                 ]
               },
@@ -6147,6 +6212,18 @@
                     "value": 170
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 157
+                  }
+                ]
               }
             ]
           },
@@ -6154,7 +6231,7 @@
             "h": 13,
             "w": 22,
             "x": 0,
-            "y": 13
+            "y": 22
           },
           "id": 55,
           "options": {
@@ -6168,7 +6245,7 @@
               "group": [],
               "metricColumn": "none",
               "rawQuery": true,
-              "rawSql": "SELECT \n   query,\n   calls, \n   average,\n   rows_returned,\n   total,\n   cpu\n   FROM (\nSELECT \n   jsonb_path_query(data::jsonb, '$[*].query ? ( (@ != \"\") && ( (@starts with \"select\") || (@starts with \"with\") || (@starts with \"update\") || (@starts with \"delete\") || (@starts with \"insert\") || (@starts with \"drop\") || (@starts with \"create\") ) )') as query,\n   jsonb_path_query(data::jsonb, '$[*].calls ? (@ != null)') as calls,\n   jsonb_path_query(data::jsonb, '$[*]._avg ? (@ != null)') as average,\n   jsonb_path_query(data::jsonb, '$[*]._rows ? (@ != null)') as rows_returned,\n   jsonb_path_query(data::jsonb, '$[*]._time ? (@ != null)') as total,\n   jsonb_path_query(data::jsonb, '$[*]._cpu ? (@ != null)') as cpu\nFROM (\n  SELECT \n    lower(q.value) as data\n  FROM \n    public.items i \n  INNER JOIN public.hosts h\n  ON\n    (\n      h.hostid = i.hostid )\n  INNER JOIN \n    public.history_text q\n  ON \n    ( \n        i.itemid = q.itemid) \n  WHERE \n    h.name = '$host'\n    AND i.name = 'PostgreSQL: pg_stat_statements dump'\n    AND q.clock > EXTRACT(EPOCH FROM NOW()) - 10 * 60\n  ORDER BY q.clock DESC LIMIT 1) j) u\n  WHERE query is not null\n  order by cpu desc LIMIT $limit\n  ;",
+              "rawSql": "SELECT\n   tm,\n   query,\n   calls, \n   average,\n   rows_returned,\n   total,\n   cpu\n   FROM (\nSELECT\n   tm,\n   jsonb_path_query(data::jsonb, '$[*].query ? ( (@ != \"\") && ( (@starts with \"select\") || (@starts with \"with\") || (@starts with \"update\") || (@starts with \"delete\") || (@starts with \"insert\") || (@starts with \"drop\") || (@starts with \"create\") ) )') as query,\n   jsonb_path_query(data::jsonb, '$[*].calls ? (@ != null)') as calls,\n   jsonb_path_query(data::jsonb, '$[*]._avg ? (@ != null)') as average,\n   jsonb_path_query(data::jsonb, '$[*]._rows ? (@ != null)') as rows_returned,\n   jsonb_path_query(data::jsonb, '$[*]._time ? (@ != null)') as total,\n   jsonb_path_query(data::jsonb, '$[*]._cpu ? (@ != null)') as cpu\nFROM (\n  SELECT\n    q.clock as tm,\n    lower(q.value) as data\n  FROM \n    public.items i \n  INNER JOIN public.hosts h\n  ON\n    (\n      h.hostid = i.hostid )\n  INNER JOIN \n    public.history_text q\n  ON \n    ( \n        i.itemid = q.itemid) \n  WHERE \n    h.name = '$host'\n    AND i.name = 'PostgreSQL: pg_stat_statements dump'\n    AND $__unixEpochFilter(q.clock)\n  ORDER BY q.clock DESC LIMIT $limit) j) u\n  WHERE query is not null\n  order by cpu desc LIMIT $limit\n  ;",
               "refId": "A",
               "select": [
                 [
@@ -6195,7 +6272,9 @@
             {
               "id": "organize",
               "options": {
-                "excludeByName": {},
+                "excludeByName": {
+                  "tm": true
+                },
                 "indexByName": {},
                 "renameByName": {
                   "average": "Average query time (ms)",
@@ -6215,14 +6294,16 @@
           "type": "table"
         }
       ],
-      "title": "Query statistics",
+      "title": "Query statistics (JSON)",
       "type": "row"
     }
   ],
-  "refresh": "30s",
+  "refresh": "5s",
   "schemaVersion": 27,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "postgres"
+  ],
   "templating": {
     "list": [
       {
@@ -6302,9 +6383,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": "node2",
-          "value": "node2"
+          "selected": false,
+          "text": "Zabbix server",
+          "value": "Zabbix server"
         },
         "datasource": null,
         "definition": "Zabbix - host",
@@ -6336,9 +6417,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "mamonsu",
-          "value": "mamonsu"
+          "selected": true,
+          "text": "pgbench",
+          "value": "pgbench"
         },
         "datasource": null,
         "definition": "Zabbix - item",
@@ -6351,14 +6432,34 @@
         "name": "database",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "mamonsu",
             "value": "mamonsu"
+          },
+          {
+            "selected": true,
+            "text": "pgbench",
+            "value": "pgbench"
           },
           {
             "selected": false,
             "text": "postgres",
             "value": "postgres"
+          },
+          {
+            "selected": false,
+            "text": "test",
+            "value": "test"
+          },
+          {
+            "selected": false,
+            "text": "x",
+            "value": "x"
+          },
+          {
+            "selected": false,
+            "text": "zabbix",
+            "value": "zabbix"
           }
         ],
         "query": {
@@ -6443,12 +6544,12 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "PostgreSQL base metrics",
+  "title": "PostgreSQL base metrics (mamonsu) JSON",
   "uid": "HPx2tLeGk",
-  "version": 8
+  "version": 25
 }
