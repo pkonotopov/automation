@@ -1,0 +1,1961 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "application": "App-PostgresPro-Linux",
+        "builtIn": 1,
+        "datasource": "Zabbix",
+        "enable": false,
+        "group": "$env: $group",
+        "hide": false,
+        "hideAcknowledged": true,
+        "host": "$host",
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "limit": 100,
+        "minseverity": 0,
+        "name": "Zabbix alerts",
+        "showHostname": true,
+        "showIn": 0,
+        "showOkEvents": true,
+        "trigger": "/^PostgreSQL service was restarted(.+) /",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Grafana dashboard for Mamonsu",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 33,
+  "iteration": 1623872948850,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "postgres"
+      ],
+      "targetBlank": false,
+      "title": "PostgreSQL base metrics (mamonsu) JSON",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "panels": [
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 0,
+        "y": 0
+      },
+      "hiddenSeries": false,
+      "id": 71,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.7",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "functions": [],
+          "group": {
+            "filter": "$env: $group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Count of bloating tables in database: $database"
+          },
+          "options": {
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": 0,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": true,
+            "minSeverity": 3
+          }
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Count of bloating tables",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:188",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:189",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 7,
+        "y": 0
+      },
+      "hiddenSeries": false,
+      "id": 73,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.7",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "functions": [],
+          "group": {
+            "filter": "$env: $group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "PostgreSQL: pg_stat_activity sessions"
+          },
+          "options": {
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": 0,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": true,
+            "minSeverity": 3
+          }
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Sessions count",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:192",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:193",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 14,
+        "y": 0
+      },
+      "id": 75,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.5.7",
+      "targets": [
+        {
+          "application": {
+            "filter": "App-PostgresPro-Linux"
+          },
+          "functions": [],
+          "group": {
+            "filter": "$env: $group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "PostgreSQL: number of idle connections"
+          },
+          "options": {
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": 0,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": true,
+            "minSeverity": 3
+          }
+        }
+      ],
+      "title": "Idle",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 14,
+        "y": 2
+      },
+      "id": 77,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.5.7",
+      "targets": [
+        {
+          "application": {
+            "filter": "App-PostgresPro-Linux"
+          },
+          "functions": [],
+          "group": {
+            "filter": "$env: $group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "PostgreSQL: number of active connections"
+          },
+          "options": {
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": 0,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": true,
+            "minSeverity": 3
+          }
+        }
+      ],
+      "title": "Active",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 14,
+        "y": 4
+      },
+      "id": 79,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.5.7",
+      "targets": [
+        {
+          "application": {
+            "filter": "App-PostgresPro-Linux"
+          },
+          "functions": [],
+          "group": {
+            "filter": "$env: $group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "PostgreSQL: number of idle in transaction connections"
+          },
+          "options": {
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": 0,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": true,
+            "minSeverity": 3
+          }
+        }
+      ],
+      "title": "Idle in transaction",
+      "type": "stat"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 64,
+      "panels": [
+        {
+          "datasource": "PostgreSQL",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": null,
+                "displayMode": "json-view",
+                "filterable": false
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Query"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 1347
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "json-view"
+                  },
+                  {
+                    "id": "custom.filterable",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query calls"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 137
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Average query running time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows returned by query (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 212
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query running time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 80
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU time used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 192
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows returned (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 155
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 149
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Average query time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 170
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query calls (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 170
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 157
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "runtime"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 187
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 22,
+            "x": 0,
+            "y": 7
+          },
+          "id": 55,
+          "options": {
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "7.5.7",
+          "targets": [
+            {
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT\n   runtime,\n   datname,\n   usename,\n   wait_event,\n   wait_event_type,\n   query\n   FROM (\nSELECT\n   tm,\n   jsonb_path_query(datax::jsonb, '$[*].runtime ? (@ !=\"\")') as runtime,\n   jsonb_path_query(datax::jsonb, '$[*].datname ? (@ !=\"\")') as datname,\n   jsonb_path_query(datax::jsonb, '$[*].usename ? (@ !=\"\")') as usename,\n   jsonb_path_query(datax::jsonb, '$[*].wait_event ? (@ !=\"\")') as wait_event,\n   jsonb_path_query(datax::jsonb, '$[*].wait_event_type ? (@ !=\"\")') as wait_event_type,\n   jsonb_path_query(datax::jsonb, '$[*].query ? (@ !=\"\")') as query\n    FROM\n        -- get 1 row in JSON format from Zabbix history_text table\n        (\nSELECT \n    q.clock as tm,\n    lower(q.value) as datax\n  FROM \n    public.items i \n  INNER JOIN public.hosts h\n  ON\n    (\n      h.hostid = i.hostid )\n  INNER JOIN \n    public.history_text q\n  ON \n    ( \n        i.itemid = q.itemid) \n  WHERE \n    h.name = '$host'\n    AND i.name = 'PostgresSQL: pg_stat_activity wait queries'\n    AND $__unixEpochFilter(q.clock)\n    order by tm desc\n    limit 1\n  ) x ) y\n  WHERE datname::text ~ '$database'\n--  limit 10\n  limit $limit\n  ;",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "title": "Wait queries: ${__from:date: DD MMM, kk.mm.ss A} – ${__to:date:DD MMM, kk.mm.ss A} ",
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "tm": true
+                },
+                "indexByName": {},
+                "renameByName": {
+                  "average": "Average query time (ms)",
+                  "calls": "Total query calls (count)",
+                  "cnt": "Total count",
+                  "cpu": "CPU time (%)",
+                  "duration": "Total duration (ms)",
+                  "maximum": "Max",
+                  "minimum": "Min",
+                  "query": "Query",
+                  "rows_returned": "Rows returned (count)",
+                  "total": "Total query time (ms)"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "CPU time (%)"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Wait queries",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 66,
+      "panels": [
+        {
+          "datasource": "PostgreSQL",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": null,
+                "displayMode": "json-view",
+                "filterable": false
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Query"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 1347
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "json-view"
+                  },
+                  {
+                    "id": "custom.filterable",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query calls"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 137
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Average query running time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows returned by query (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 212
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query running time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 80
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU time used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 192
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows returned (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 155
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 149
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Average query time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 170
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query calls (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 170
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 157
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "runtime"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 187
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 13,
+            "w": 22,
+            "x": 0,
+            "y": 9
+          },
+          "id": 67,
+          "options": {
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "7.5.7",
+          "targets": [
+            {
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT\n    datid,\n    datname,\n    pid,\n    leader_pid,\n    usesysid,\n    application_name,\n    client_addr,\n    client_hostname,\n    client_port,\n    backend_start,\n    xact_start,\n    query_start,\n    state_change,wait_event_type,wait_event,state,backend_xid,backend_xmin,backend_type,\n    query\nFROM \n    (   SELECT\n            tm,\n            jsonb_path_query(datax::jsonb, '$[*].datid ? (@ !=\"\")')            AS datid,\n            jsonb_path_query(datax::jsonb, '$[*].datname ? (@ !=\"\")')          AS datname,\n            jsonb_path_query(datax::jsonb, '$[*].pid ? (@ !=null)')              AS pid,\n            jsonb_path_query(datax::jsonb, '$[*].leader_pid ? (@ !=null)')       AS leader_pid,\n            jsonb_path_query(datax::jsonb, '$[*].usesysid ? (@ !=\"\")')         AS usesysid,\n            jsonb_path_query(datax::jsonb, '$[*].application_name ? (@ !=\"\")') AS application_name,\n            jsonb_path_query(datax::jsonb, '$[*].client_addr ? (@ !=\"\")')      AS client_addr,\n            jsonb_path_query(datax::jsonb, '$[*].client_hostname ? (@ !=\"\")')  AS client_hostname,\n            jsonb_path_query(datax::jsonb, '$[*].client_port ? (@ !=null)')      AS client_port,\n            jsonb_path_query(datax::jsonb, '$[*].backend_start ? (@ !=\"\")')    AS backend_start,\n            jsonb_path_query(datax::jsonb, '$[*].xact_start ? (@ !=\"\")')       AS xact_start,\n            jsonb_path_query(datax::jsonb, '$[*].query_start ? (@ !=\"\")')      AS query_start,\n            jsonb_path_query(datax::jsonb, '$[*].state_change ? (@ !=\"\")')     AS state_change,\n            jsonb_path_query(datax::jsonb, '$[*].wait_event_type ? (@ !=\"\")')  AS wait_event_type,\n            jsonb_path_query(datax::jsonb, '$[*].wait_event ? (@ !=\"\")')       AS wait_event,\n            jsonb_path_query(datax::jsonb, '$[*].state ? (@ !=\"\")')            AS state,\n            jsonb_path_query(datax::jsonb, '$[*].backend_xid ? (@ !=\"\")')     AS backend_xid,\n            jsonb_path_query(datax::jsonb, '$[*].backend_xmin ? (@ !=\"\")')     AS backend_xmin,\n            jsonb_path_query(datax::jsonb, '$[*].backend_type ? (@ !=\"\")')     AS backend_type,\n            jsonb_path_query(datax::jsonb, '$[*].query ? (@ !=\"\")')            AS query\n        FROM\n            -- get 1 row in JSON format from Zabbix history_text table\n            (   SELECT\n                    q.clock        AS tm,\n                    lower(q.value) AS datax\n                FROM\n                    public.items i\n                INNER JOIN \n                    public.hosts h\n                ON\n                    (\n                        h.hostid = i.hostid )\n                INNER JOIN\n                    public.history_text q\n                ON\n                    (\n                        i.itemid = q.itemid)\n                WHERE\n                    h.name = '$host'\n                AND i.name = 'PostgresSQL: pg_stat_activity active queries'\n                AND $__unixEpochFilter(q.clock)\n                order by tm desc\n                limit 1\n                ) x ) y\nWHERE \n  datname::TEXT ~ '$database'\nlimit $limit;",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "title": "Active queries: current state",
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "tm": true
+                },
+                "indexByName": {},
+                "renameByName": {
+                  "average": "Average query time (ms)",
+                  "calls": "Total query calls (count)",
+                  "cnt": "Total count",
+                  "cpu": "CPU time (%)",
+                  "duration": "Total duration (ms)",
+                  "maximum": "Max",
+                  "minimum": "Min",
+                  "query": "Query",
+                  "rows_returned": "Rows returned (count)",
+                  "total": "Total query time (ms)"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "CPU time (%)"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Active queries",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 62,
+      "panels": [
+        {
+          "datasource": "PostgreSQL",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": null,
+                "displayMode": "json-view",
+                "filterable": false
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Query"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 1347
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "json-view"
+                  },
+                  {
+                    "id": "custom.filterable",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query calls"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 137
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Average query running time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows returned by query (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 212
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query running time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 80
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU time used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 192
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows returned (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 155
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 149
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Average query time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 170
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query calls (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 170
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 157
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "runtime"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 187
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 22,
+            "x": 0,
+            "y": 3
+          },
+          "id": 68,
+          "options": {
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "7.5.7",
+          "targets": [
+            {
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT\n   datname,\n   usename,\n   state,\n   cnt\n   FROM (\nSELECT\n   tm,\n   jsonb_path_query(datax::jsonb, '$[*].datname ? (@ !=\"\")') as datname,\n   jsonb_path_query(datax::jsonb, '$[*].usename ? (@ !=\"\")') as usename,\n   jsonb_path_query(datax::jsonb, '$[*].state ? (@ !=\"\")') as state,\n   jsonb_path_query(datax::jsonb, '$[*].count ? (@ !=null)') as cnt\n    FROM\n        -- get 1 row in JSON format from Zabbix history_text table\n        (\nSELECT \n    q.clock as tm,\n    lower(q.value) as datax\n  FROM \n    public.items i \n  INNER JOIN public.hosts h\n  ON\n    (\n      h.hostid = i.hostid )\n  INNER JOIN \n    public.history_text q\n  ON \n    ( \n        i.itemid = q.itemid) \n  WHERE \n    h.name = '$host'\n    AND i.name = 'PostgresSQL: pg_stat_activity connections count per database'\n    AND $__unixEpochFilter(q.clock)\n    order by tm desc\n    limit 1\n  ) x ) y\n  WHERE datname::text ~ '$database'\n--  limit 10\n  limit $limit\n  ;",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "title": "Connections count per database: ${__from:date: DD MMM, kk.mm.ss A} – ${__to:date:DD MMM, kk.mm.ss A} ",
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "tm": true
+                },
+                "indexByName": {},
+                "renameByName": {
+                  "average": "Average query time (ms)",
+                  "calls": "Total query calls (count)",
+                  "cnt": "Total count",
+                  "cpu": "CPU time (%)",
+                  "duration": "Total duration (ms)",
+                  "maximum": "Max",
+                  "minimum": "Min",
+                  "query": "Query",
+                  "rows_returned": "Rows returned (count)",
+                  "total": "Total query time (ms)"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "CPU time (%)"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Connections count per database",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 60,
+      "panels": [
+        {
+          "datasource": "PostgreSQL",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": null,
+                "displayMode": "json-view",
+                "filterable": false
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Query"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 1347
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "json-view"
+                  },
+                  {
+                    "id": "custom.filterable",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query calls"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 137
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Average query running time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows returned by query (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 212
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query running time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 80
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU time used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 192
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows returned (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 155
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 149
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Average query time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 170
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Total query calls (count)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 170
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU used by query (%)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 157
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "runtime"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 187
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "blocked_pid"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 92
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "blocked_user"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 117
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 22,
+            "x": 0,
+            "y": 4
+          },
+          "id": 69,
+          "options": {
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "7.5.7",
+          "targets": [
+            {
+              "format": "table",
+              "group": [],
+              "metricColumn": "none",
+              "rawQuery": true,
+              "rawSql": "SELECT\n    blocked_pid,\n    blocked_user,\n    blocked_client_addr,\n    blocked_client_hostname,\n    blocked_client_port,\n    blocked_application_name,\n    blocked_wait_event_type,\n    blocked_wait_event,\n    blocked_statement,\n    blocked_xact_start,\n    blocking_pid,\n    blocking_user,\n    blocking_user_addr,\n    blocking_client_hostname,\n    blocking_client_port,\n    blocking_application_name,\n    blocking_wait_event_type,\n    blocking_wait_event,\n    current_statement_in_blocking_process,\n    blocking_xact_start\nFROM \n    (   SELECT\n            tm,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_pid ? (@ !=null)') AS blocked_pid,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_user ? (@ !=\"\")') AS blocked_user,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_client_addr ? (@ !=null)') AS blocked_client_addr,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_client_hostname ? (@ !=\"\")') AS blocked_client_hostname,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_client_port ? (@ !=null)') AS blocked_client_port,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_application_name ? (@ !=\"\")')         AS blocked_application_name,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_wait_event_type ? (@ !=\"\")') AS blocked_wait_event_type,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_wait_event ? (@ !=\"\")')      AS blocked_wait_event,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_statement ? (@ !=null)')  AS blocked_statement,\n            jsonb_path_query(datax::jsonb, '$[*].blocked_xact_start ? (@ !=\"\")')      AS blocked_xact_start,\n            jsonb_path_query(datax::jsonb, '$[*].backend_start ? (@ !=\"\")')    AS backend_start,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_pid ? (@ !=null)')       AS blocking_pid,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_user ? (@ !=\"\")')      AS blocking_user,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_user_addr ? (@ !=\"\")')     AS blocking_user_addr,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_client_hostname ? (@ !=\"\")')  AS blocking_client_hostname,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_client_port ? (@ !=null)')       AS blocking_client_port,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_application_name ? (@ !=\"\")')            AS blocking_application_name,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_wait_event_type ? (@ !=\"\")')     AS blocking_wait_event_type,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_wait_event ? (@ !=\"\")')     AS blocking_wait_event,\n            jsonb_path_query(datax::jsonb, '$[*].current_statement_in_blocking_process ? (@ !=\"\")')     AS current_statement_in_blocking_process,\n            jsonb_path_query(datax::jsonb, '$[*].blocking_xact_start ? (@ !=\"\")')            AS blocking_xact_start\n        FROM\n        -- get 1 row in JSON format from Zabbix history_text table\n        (\nSELECT \n    q.clock as tm,\n    lower(q.value) as datax\n  FROM \n    public.items i \n  INNER JOIN public.hosts h\n  ON\n    (\n      h.hostid = i.hostid )\n  INNER JOIN \n    public.history_text q\n  ON \n    ( \n        i.itemid = q.itemid) \n  WHERE \n    h.name = '$host'\n    AND i.name = 'PostgresSQL: pg_stat_activity queries locked'\n    AND $__unixEpochFilter(q.clock)\n    order by tm desc\n    limit 1\n  ) x ) y\n--  limit 10\n  limit $limit\n  ;",
+              "refId": "A",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "column"
+                  }
+                ]
+              ],
+              "timeColumn": "time",
+              "where": [
+                {
+                  "name": "$__timeFilter",
+                  "params": [],
+                  "type": "macro"
+                }
+              ]
+            }
+          ],
+          "title": "Queries locked: current state",
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "tm": true
+                },
+                "indexByName": {},
+                "renameByName": {
+                  "average": "Average query time (ms)",
+                  "calls": "Total query calls (count)",
+                  "cnt": "Total count",
+                  "cpu": "CPU time (%)",
+                  "duration": "Total duration (ms)",
+                  "maximum": "Max",
+                  "minimum": "Min",
+                  "query": "Query",
+                  "rows_returned": "Rows returned (count)",
+                  "total": "Total query time (ms)"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "CPU time (%)"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Queries locked",
+      "type": "row"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 27,
+  "style": "dark",
+  "tags": [
+    "active"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "nonprod",
+          "value": "nonprod"
+        },
+        "datasource": null,
+        "definition": "Zabbix - group",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Env",
+        "multi": false,
+        "name": "env",
+        "options": [
+          {
+            "selected": true,
+            "text": "nonprod",
+            "value": "nonprod"
+          }
+        ],
+        "query": {
+          "application": "",
+          "group": "/.*/",
+          "host": "",
+          "item": "",
+          "queryType": "group"
+        },
+        "refresh": 0,
+        "regex": "/^(.+):/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "db",
+          "value": "db"
+        },
+        "datasource": null,
+        "definition": "Zabbix - group",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Group",
+        "multi": false,
+        "name": "group",
+        "options": [],
+        "query": {
+          "application": "",
+          "group": "/.*/",
+          "host": "",
+          "item": "",
+          "queryType": "group"
+        },
+        "refresh": 1,
+        "regex": "/^$env: (db)/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "Zabbix server",
+          "value": "Zabbix server"
+        },
+        "datasource": null,
+        "definition": "Zabbix - host",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Host",
+        "multi": false,
+        "name": "host",
+        "options": [],
+        "query": {
+          "application": "",
+          "group": "$env: $group",
+          "host": "/.*/",
+          "item": "",
+          "queryType": "host"
+        },
+        "refresh": 1,
+        "regex": "/.*/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "mamonsu",
+          "value": "mamonsu"
+        },
+        "datasource": null,
+        "definition": "Zabbix - item",
+        "description": "Discover databases names.",
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Database",
+        "multi": false,
+        "name": "database",
+        "options": [
+          {
+            "selected": true,
+            "text": "mamonsu",
+            "value": "mamonsu"
+          },
+          {
+            "selected": false,
+            "text": "pgbench",
+            "value": "pgbench"
+          },
+          {
+            "selected": false,
+            "text": "postgres",
+            "value": "postgres"
+          },
+          {
+            "selected": false,
+            "text": "test",
+            "value": "test"
+          },
+          {
+            "selected": false,
+            "text": "x",
+            "value": "x"
+          },
+          {
+            "selected": false,
+            "text": "zabbix",
+            "value": "zabbix"
+          }
+        ],
+        "query": {
+          "application": "",
+          "group": "$env: $group",
+          "host": "$host",
+          "item": "/^Database /",
+          "queryType": "item"
+        },
+        "refresh": 0,
+        "regex": "/^Database (\\S+):/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "auto": false,
+        "auto_count": 30,
+        "auto_min": "10s",
+        "current": {
+          "selected": false,
+          "text": "10",
+          "value": "10"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "label": "Queries limit",
+        "name": "limit",
+        "options": [
+          {
+            "selected": false,
+            "text": "5",
+            "value": "5"
+          },
+          {
+            "selected": true,
+            "text": "10",
+            "value": "10"
+          },
+          {
+            "selected": false,
+            "text": "15",
+            "value": "15"
+          },
+          {
+            "selected": false,
+            "text": "20",
+            "value": "20"
+          },
+          {
+            "selected": false,
+            "text": "30",
+            "value": "30"
+          },
+          {
+            "selected": false,
+            "text": "40",
+            "value": "40"
+          },
+          {
+            "selected": false,
+            "text": "50",
+            "value": "50"
+          }
+        ],
+        "query": "5,10,15,20,30,40,50",
+        "queryValue": "",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "PostgreSQL active queries: current state",
+  "uid": "p6eostg7z",
+  "version": 18
+}
