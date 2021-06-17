@@ -157,7 +157,9 @@ interval = 2
 [agentapi]
 interval = 60
 
-[Replica]
+# Custom plugins config
+
+[ReplicaStatus]
 enabled = True
 interval = 60
 
@@ -170,5 +172,9 @@ enabled = True
 interval = 600
 
 [PgStatActivityJson]
+enabled = True
+interval = 30
+
+[SessionsCount]
 enabled = True
 interval = 30

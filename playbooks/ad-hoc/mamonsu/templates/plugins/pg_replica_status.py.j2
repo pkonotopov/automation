@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+# Mamonsu plugin for Zabbix PGSQL metrics:
+#
+# Metric:      pgsql.replica.status[]
+# Metric name: PostgresSQL: replica status
+#
+# Pls, create it manually in Zabbix
+
+from mamonsu.plugins.pgsql.plugin import PgsqlPlugin as Plugin
+from mamonsu.plugins.pgsql.pool import Pooler
+
+class ReplicaStatus(Plugin):
+    DEFAULT_CONFIG = {'enabled': str(True)}
+    Interval = 60
+
+    AgentPluginType = 'pg'
+
+    key_is_in_recovery = 'pgsql.replica.status{0}'
+
+    def run(self, zbx):
+        zbx.send(self.key_is_in_recovery.format('[]'), int(Pooler.in_recovery()))
+
+    def items(self, template):
